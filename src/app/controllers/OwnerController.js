@@ -2,7 +2,6 @@ const User = require("../models/User");
 const RestaurantInfor = require("../models/RestaurantInfor");
 const Order = require("../models/OrderFood");
 const SubscriptionLog = require("../models/SubscriptionLog");
-
 const bankMap = {
   970430: "TPBank",
   970436: "Vietcombank",
