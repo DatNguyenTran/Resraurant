@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-
 const UserSchema = new Schema(
   {
     firstName: { type: String, required: false },
@@ -17,7 +16,14 @@ const UserSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["RESOWNER", "RESMANAGER", "WAITER", "KITCHENSTAFF", "CUSTOMER", "ADMIN"],
+      enum: [
+        "RESOWNER",
+        "RESMANAGER",
+        "WAITER",
+        "KITCHENSTAFF",
+        "CUSTOMER",
+        "ADMIN",
+      ],
       required: true,
     },
     status: { type: String, enum: ["ACTIVE", "INACTIVE"], required: true },
@@ -33,18 +39,18 @@ const UserSchema = new Schema(
             enum: ["TRIAL", "MONTHLY", "YEARLY", "EXPIRED"],
             default: "TRIAL",
           },
-          trialEnd: Date,      // nếu là trial
-          startedAt: Date,     // nếu là paid
-          expiredAt: Date
+          trialEnd: Date, // nếu là trial
+          startedAt: Date, // nếu là paid
+          expiredAt: Date,
         },
         { _id: false } // Không cần _id cho subdocument
       ),
-      default: () => ({})
+      default: () => ({}),
     },
     restaurant: {
       type: Schema.Types.ObjectId,
-      ref: "RestaurantInfor"
-    }
+      ref: "RestaurantInfor",
+    },
   },
   { timestamps: true }
 );
