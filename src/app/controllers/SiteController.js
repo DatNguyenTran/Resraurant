@@ -6,7 +6,6 @@ class SiteController {
     }
     res.render("login", { layout: "layouts/auth", title: "Login" });
   }
-
   register(req, res, next) {
     if (req.session.user) {
       return res.redirect("/");
