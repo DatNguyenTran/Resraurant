@@ -1,0 +1,9 @@
+# Không đẩy secrets
+.env
+.env.local
+
+# Không track thư viện
+node_modules/
+dist/
+build/
+.cache/

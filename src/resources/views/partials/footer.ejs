@@ -1,0 +1,84 @@
+  <head>
+    <title>Footer Section</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link href="/css/footer.css" rel="stylesheet" />
+  </head>
+  <body>
+    <d class="footer">
+      <div>
+        <img 
+          alt="Thư vãn logo"
+          src="/image/resly.png"
+        />
+      </div>
+      <div>
+        <h3>Địa chỉ</h3>
+        <p style="width: 170px;">52 Trần Quý Cáp, Đà Nẵng, Việt Nam</p>
+      </div>
+      <div class="footer-policy">
+        <h3><a href="#" id="showPolicy">Chính sách và điều khoản</a></h3>
+      </div>
+      <div>
+        <h3>Liên hệ</h3>
+        <p>0788676059</p>
+        <p>resly@gmail.com</p>
+      </div>
+      <div>
+        <h3>Theo dõi</h3>
+        <div class="social-icons">
+          <i class="fab fa-tripadvisor"> </i>
+          <i class="fab fa-facebook"> </i>
+          <i class="fab fa-instagram"> </i>
+        </div>
+      </div>
+    </d>
+    <div id="policyModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Chính sách & Điều khoản</h2>
+        <pre id="policyContent" style="white-space: pre-wrap; font-family: 'Poppins', sans-serif;"></pre>
+      </div>
+    </div>
+
+    <script>
+      const modal = document.getElementById("policyModal");
+      const btn = document.getElementById("showPolicy");
+      const span = document.getElementsByClassName("close")[0];
+      const policyContent = document.getElementById("policyContent");
+
+      btn.onclick = () => {
+        fetch("/Chính sách và Điều khoản sử dụng.txt") // đường dẫn tương đối đến file trong /public
+          .then(response => response.text())
+          .then(data => {
+            policyContent.textContent = data;
+            modal.style.display = "block";
+          })
+          .catch(error => {
+            policyContent.textContent = "Không thể tải nội dung chính sách. Vui lòng thử lại sau.";
+            modal.style.display = "block";
+          });
+      }
+
+      span.onclick = () => {
+        modal.style.display = "none";
+      }
+
+      window.onclick = (event) => {
+        if (event.target === modal) {
+          modal.style.display = "none";
+        }
+      }
+    </script>
+
+  </body>
+
+
+
+      

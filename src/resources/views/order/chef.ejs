@@ -1,0 +1,239 @@
+<style>
+    /* Nền mờ tối khi bật modal */
+    .custom-modal-background.show {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    inset: 0;
+    z-index: 1055;
+    }
+
+    /* Khung modal */
+    .custom-modal-box {
+    max-width: 400px;
+    width: 100%;
+    }
+
+    /* Nội dung khung modal */
+    .custom-modal-content {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+    }
+
+    /* Icon */
+    .custom-icon-alert {
+    width: 70px;
+    height: 70px;
+    border: 2px solid orange;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    }
+</style>
+
+<div class="row col-12 mt-3">
+    <button onclick="changeFilterAll(); renderDish()" id="all" class="m-1 btn btn-success">Tất cả</button>
+    <button onclick="pending = !pending; checkStatus(); renderDish()" id="pending" class="m-1 btn btn-outline-success">Đang chờ</button>
+    <button onclick="inProgress = !inProgress; checkStatus(); renderDish()" id="inProgress" class="m-1 btn btn-outline-success">Đang tiến hành</button>
+    <button onclick="completed = !completed; checkStatus(); renderDish()" id="completed" class="m-1 btn btn-outline-success">Đã xong</button>
+</div>
+<div class="row col-12 mt-3" id="mainPage">
+
+</div>
+<script>
+    getDishesInDay()
+    let dishData = [];
+    let all = true;
+    let pending = true;
+    let inProgress = true;
+    let completed = true;
+    changeFilterAll();
+    const socket = new WebSocket("ws://localhost:3000");
+    socket.onopen = () => {
+        console.log("Connected to WebSocket server");
+    };
+
+    socket.onmessage = (event) => {
+        console.log("Message from server:", event.data);
+        getDishesInDay()
+    };
+
+    socket.onclose = () => {
+        console.log("Disconnected from WebSocket server");
+    };
+    function changeFilterAll(){
+        all = true;
+        pending = true;
+        inProgress = true;
+        completed = true;
+        $("#all").removeClass().addClass("m-1 btn btn-success")
+        $("#pending").removeClass().addClass("m-1 btn btn-success")
+        $("#inProgress").removeClass().addClass("m-1 btn btn-success")
+        $("#completed").removeClass().addClass("m-1 btn btn-success")
+    }
+    function checkStatus() {
+        if (pending && inProgress && completed) {
+            changeFilterAll();
+        } else {
+            all = false;
+            $("#all").removeClass().addClass("m-1 btn btn-outline-success")
+            if (pending) {
+                $("#pending").removeClass().addClass("m-1 btn btn-success")
+            } else {
+                $("#pending").removeClass().addClass("m-1 btn btn-outline-success")
+            }
+            if (inProgress) {
+                $("#inProgress").removeClass().addClass("m-1 btn btn-success")
+            } else {
+                $("#inProgress").removeClass().addClass("m-1 btn btn-outline-success")
+            }
+            if (completed) {
+                $("#completed").removeClass().addClass("m-1 btn btn-success")
+            } else {
+                $("#completed").removeClass().addClass("m-1 btn btn-outline-success")
+            }
+        }
+    }
+    function changeStatus(orderId, dishId, status, tableId){
+        data = {
+            orderId: orderId,
+            dishId: dishId,
+            status : status
+        }
+        axios.put('/order/change-dish-status', data)
+            .then((res) => {
+                if (res.status === 200){
+                    getDishesInDay()
+                    socket.send(JSON.stringify({tableId: tableId}))
+                } else {
+                    toastr.error(res.data.error)
+                }
+            })
+    }
+    function deleteDish(orderId, dishId) {
+        Swal.fire({
+            title: "Ẩn món khỏi bếp?",
+            text: "Món sẽ ẩn trên giao diện bếp nhưng vẫn giữ trong hệ thống để thống kê.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Ẩn món",
+            cancelButtonText: "Không",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.put(`/order/hide-dish/${orderId}/${dishId}`)
+                    .then(res => {
+                        if (res.status === 200) {
+                            Swal.fire("Đã ẩn!", res.data.message, "success");
+                            getDishesInDay();
+                        } else {
+                            Swal.fire("Lỗi!", res.data.error, "error");
+                        }
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                        Swal.fire("Lỗi!", "Ẩn món thất bại. Vui lòng thử lại sau.", "error");
+                    });
+            }
+        });
+    }
+    function getDishesInDay() {
+        axios.get(`/order/dishes-of-day`)
+            .then((res) => {
+                dishData = res.data
+                renderDish()
+            })
+            .catch((err) => {
+                console.error(err);
+                toastr.error('Không thể tải danh sách món');
+            });
+    }
+    function getStatusVietnamese(status){
+        if (status === 'Pending') {
+            return "Đang chờ"
+        }
+        if (status === 'In Progress') {
+            return "Đang tiến hành"
+        }
+        if (status === 'Completed'){
+            return "Đã hoàn thành"
+        }
+    }
+    function renderDish() {
+        let html = '';
+        let temp = [];
+
+        // Lọc các món theo trạng thái và bỏ qua món Hidden
+        for (let i = 0; i < dishData.length; i++) {
+            const dish = dishData[i].dishes;
+
+            // Bỏ qua nếu món đã bị ẩn
+            if (dish.statusOrder === 'Hidden') continue;
+
+            if (dish.statusOrder === 'Pending' && pending) {
+                temp.push(dishData[i]);
+            }
+            if (dish.statusOrder === 'In Progress' && inProgress) {
+                temp.push(dishData[i]);
+            }
+            if (dish.statusOrder === 'Completed' && completed) {
+                temp.push(dishData[i]);
+            }
+        }
+
+        // Render các món đã lọc
+        for (let i = 0; i < temp.length; i++) {
+            const currentDish = temp[i].dishes;
+            const currentTable = temp[i].tableData;
+
+            // Xác định nút action (Nhận món hoặc Hoàn thành)
+            let actionButton = '';
+            if (currentDish.statusOrder === 'Pending') {
+                actionButton = `
+                    <button onclick="changeStatus('${temp[i]._id}', '${currentDish._id}', 'In Progress', '${temp[i].table}')"
+                            class="btn btn-outline-dark w-100 mt-3">
+                        Nhận món
+                    </button>`;
+            } else if (currentDish.statusOrder === 'In Progress') {
+                actionButton = `
+                    <button onclick="changeStatus('${temp[i]._id}', '${currentDish._id}', 'Completed', '${temp[i].table}')"
+                            class="btn btn-outline-dark w-100 mt-3">
+                        Hoàn thành
+                    </button>`;
+            }
+
+            // Nút ẩn món
+            let hideButton = `
+                <button onclick="deleteDish('${temp[i]._id}', '${currentDish._id}')"
+                        class="btn btn-outline-danger w-100 mt-2">
+                    Ẩn món
+                </button>`;
+
+            html += `
+                <div class="col-md-4">
+                    <div class="border p-3 rounded shadow-sm">
+                        <h5 class="fw-bold mb-2">Bàn ${currentTable.idTable}</h5>
+                        <img src="${currentDish.menuData.imageUrl}" 
+                            alt="Dish image" 
+                            class="img-fluid rounded mb-3" 
+                            style="width: 100%; height: 250px; object-fit: cover;">
+                        <p class="mb-1 fw-semibold">${currentDish.menuData.foodName}</p>
+                        <p class="mb-1">Số lượng: <span class="fw-bold">${currentDish.quantity}</span></p>
+                        <p class="mb-1">Thời gian đặt: ${new Date(temp[i].firstDishOrderDate).toLocaleTimeString()}</p>
+                        <p class="mb-1">Trạng thái: <span class="fw-bold">${getStatusVietnamese(currentDish.statusOrder)}</span></p>
+                        ${actionButton}
+                        ${hideButton}
+                    </div>
+                </div>`;
+        }
+
+        $('#mainPage').html(html);
+    }
+</script>
+

@@ -1,0 +1,327 @@
+/* Tổng quan */
+
+  /* Header */
+  .menu{
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    background: url('/image/thuc-don.jpg') no-repeat center center/cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .menu-header {
+    text-align: center;
+    padding: 2rem 0;
+  }
+  .menu-header h1 {
+    font-size: 60px;
+    font-weight: 100;
+    color: #FFF;
+  }
+  
+  /* Container */
+  .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: -0.5rem auto 0;
+  }
+  
+  /* Phần tìm kiếm và danh mục */
+  .search-category {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  .search-input {
+    flex-grow: 1;
+    padding: 0.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+  }
+  .search-btn {
+    margin-left: 1rem;
+    padding: 0.5rem;
+    background-color: #e3342f;
+    color: #ffffff;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+  
+  /* Danh mục */
+  .category-list {
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+  }
+  /* Nút danh mục mặc định */
+.category-btn {
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+    border: none;
+    background-color: transparent;
+    color: black;
+    font-size: 16px;
+    position: relative;
+    cursor: pointer;
+}
+
+/* Viền dưới xuất hiện khi active */
+.category-btn::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+}
+
+/* Trạng thái inactive */
+.category-btn.inactive {
+    background-color: rgb(241, 240, 240);
+    color: #718096;
+  }
+
+/* Trạng thái active */
+.category-btn.active {
+    font-weight: bold;
+    background-color: #ffe0e0; /* Màu nền nhạt khi active */
+}
+
+/* // Viền dưới khi active */
+.category-btn.active::after {
+    background-color: red;
+}
+
+/* Phần số trong danh mục */
+.category-count {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 14px;
+    margin-left: 0.65rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Khi active, khung số có viền đỏ */
+.category-btn.active .category-count {
+    background-color: #e3342f;
+    color: #ffffff;
+}
+
+/* Hiệu ứng hover */
+.category-btn.inactive:hover {
+    background-color: #ec5252e6;
+    color: white;
+}
+
+.category-btn.active:hover {
+    background-color: #ec5252e6;
+}
+  
+  /* Tiêu đề menu */
+  .menu-title {
+    margin-top: 1.5rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  /* Danh sách món ăn */
+  .menu-items {
+    padding-bottom: 72px;
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    grid-template-columns: repeat(1, 1fr);
+  }
+  @media (min-width: 640px) {
+    .menu-items {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 768px) {
+    .menu-items {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .menu-items {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  
+  /* Món ăn */
+  .menu-item {
+    background-color: #ffffff;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  .menu-item-image {
+    position: relative;
+  }
+  .img-responsive {
+    width: 100%;
+    border-radius: 0.5rem;
+  }
+  
+  /* Tiêu đề món ăn */
+  .menu-item-title {
+    text-align: center; /* Căn giữa chữ */
+    display: block; /* Đảm bảo nó là khối để text-align hoạt động */
+    margin-top: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  /* Thông tin món ăn */
+  /* .menu-item-info {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #718096;
+  } */
+  
+  /* Mô tả món ăn */
+  .menu-item-description {
+    margin-top: 0.5rem;
+    color: #718096;
+  }
+  
+  .menu-item-info {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: space-between; /* Căn hai bên */
+    align-items: center;
+    font-size: large;
+    font-weight: bold; /* Căn giữa theo chiều dọc */
+    color: blue;
+    position: relative; /* Giữ nguyên nhưng giúp căn chỉnh tốt hơn */
+}
+
+.dish-rating {
+    position: relative; /* Bỏ absolute để giữ nguyên trên cùng một hàng */
+    display: flex; /* Hiển thị sao theo hàng ngang */
+    align-items: center;
+    margin-left: 10px; /* Tạo khoảng cách giữa giá tiền và sao */
+}
+
+.star-icon {
+    color: #fbbf24; /* Màu vàng như trong hình */
+    margin-right: 2px; /* Tạo khoảng cách giữa các sao */
+    font-size: 16px; /* Điều chỉnh kích thước sao nếu cần */
+}
+
+.filter-container {
+  position: relative;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#filter-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  border-radius: 8px;
+  margin-top: 5px;
+  z-index: 20;
+  flex-direction: column;
+  width: 140px;
+}
+
+#filter-menu button {
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+
+#filter-menu button:hover {
+  background-color: #f0f0f0;
+}
+
+.filter-container {
+  position: relative;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 11px 13px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#filter-menu {
+  display: flex; /* Giữ nguyên kiểu hiển thị flex */
+  flex-direction: column;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.3s ease;
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  border-radius: 8px;
+  margin-top: 5px;
+  z-index: 20;
+  width: 130px;
+}
+
+#filter-menu.show {
+  transform: scaleY(1);
+}
+
+#filter-menu button {
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+#filter-menu button:hover {
+  background-color: #f0f0f0;
+}
+
+#filter-menu button.active-filter {
+  background-color: #ebebeb;
+  color: black;
+}
+
+
+

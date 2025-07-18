@@ -1,0 +1,183 @@
+<div class="d-flex gap-3 p-4" style="height: 90vh; overflow: hidden;">
+    <!-- Left Panel: Table Info -->
+    <div class="w-50 border p-4 rounded shadow-sm d-flex flex-column" style="height: 100%;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h5 fw-bold mb-0">
+                Bàn số <%= table.idTable %> - <span class="text-muted">Bàn lượt <%= table.session %></span>
+            </h2>
+            <button onclick="resetTable('<%= table._id %>')" class="btn btn-outline-danger btn-sm">
+                Reset bàn (khách mới vào bàn)
+            </button>
+        </div>
+        <div class="flex-grow-1" style="overflow: auto;">
+            <table class="table table-bordered text-center" id="orderDataTable">
+                <thead>
+                    <tr>
+                        <th>Tên món ăn</th>
+                        <th>Số lượng</th>
+                        <th>Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="row mt-3">
+            <div class="col-6" id="left-panel-total-price">Tổng giá:</div>
+            <div class="col-6">
+                <form class="thanh-toan" method="get">
+                    <button class="btn btn-primary w-100" type="submit">Thanh toán</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Panel: Menu List -->
+    <div class="w-50 border p-4 rounded shadow-sm d-flex flex-column" style="overflow: auto;">
+        <h2 class="h5 fw-bold mb-3">Thực đơn</h2>
+        <div class="row g-3">
+            <% menus.forEach(menu=> { %>
+                <div class="col-6 col-md-4">
+                    <div class="border rounded p-3 shadow-sm text-center">
+                        <img src="<%= menu.imageUrl %>" alt="<%= menu.foodName %>" class="img-fluid rounded"
+                            style="max-width: 100px; height: 80px; object-fit: cover;">
+                        <h3 class="h6 fw-semibold mt-2">
+                            <%= menu.foodName %>
+                        </h3>
+                        <p class="text-muted">
+                            <%= Number(menu.price).toLocaleString("vi-VN") %> VND
+                        </p>
+                        <p class="text-<%=menu.statusFood === 'AVAILABLE' ? 'success': 'danger'%>">
+                            <%=menu.statusFood==='AVAILABLE' ? 'Còn món' : 'Đã hết' %>
+                        </p>
+                        <button onclick="removePrepareDishes('<%=menu._id%>', '<%=menu.price%>')"
+                            <%=menu.statusFood==='UNAVAILABLE' ? 'disabled' : '' %> class="btn btn-warning">-</button>
+                        <span id="number_dishes_<%=menu._id%>">0</span>
+                        <button onclick="addPrepareDishes('<%=menu._id%>', '<%=menu.price%>')"
+                            <%=menu.statusFood==='UNAVAILABLE' ? 'disabled' : '' %> class="btn btn-warning">+</button>
+                    </div>
+                </div>
+                <% }) %>
+        </div>
+        <div class="row g-3">
+            <button disabled onclick="add()" id="add" class="btn btn-success w-100 m-1">Thêm</button>
+        </div>
+    </div>
+</div>
+<script>
+    let addedDishes = [];
+    let toAddDished = [];
+    let toAddDishesPrice = 0;
+    let tableId = '<%= table._id %>'
+    const socket = new WebSocket("ws://localhost:3000");
+    socket.onopen = () => console.log("🟢 Socket connected");
+    socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.tableId === tableId) {
+            console.log("🔄 Cập nhật order bàn từ socket");
+            getTableOrderInfo();
+        }
+    };
+    socket.onclose = () => console.log("🔴 Socket disconnected");
+    getTableOrderInfo();
+    function addPrepareDishes(id, price) {
+        toAddDished.push(id);
+        toAddDishesPrice += Number(price);
+        updatePrepareDishesNumber(id);
+        changeAddButton();
+    }
+    function removePrepareDishes(id, price) {
+        if (toAddDished.length === 0) return;
+        toAddDished.splice(toAddDished.indexOf(id), 1);
+        toAddDishesPrice -= price;
+        updatePrepareDishesNumber(id);
+        changeAddButton();
+    }
+    function countPrepareDishes(id) {
+        return toAddDished.filter(dish => dish === id).length;
+    }
+    function updatePrepareDishesNumber(id) {
+        let number = countPrepareDishes(id);
+        $("#number_dishes_" + id).text(number)
+    }
+    function changeAddButton() {
+        let btn = $('#add');
+        if (toAddDished.length === 0) {
+            btn.prop('disabled', true);
+            btn.text('Thêm')
+        } else {
+            btn.prop('disabled', false);
+            const formatted = Number(toAddDishesPrice).toLocaleString("vi-VN");
+            btn.text('Thêm ' + toAddDished.length + ' món ăn (' + formatted + ' VND)');
+        }
+    }
+    function add() {
+        const data = {
+            tableId: tableId,
+            dishes: toAddDished,
+        }
+        axios.post('/order', data)
+            .then((res) => {
+                if (res.status === 200) {
+                    toastr.success(res.data.message)
+                    toAddDished = [];
+                    toAddDishesPrice = 0;
+                    changeAddButton();
+                    getTableOrderInfo();
+                    $("span[id^='number_dishes_']").text(0);
+                    socket.send(1)
+                } else {
+                    toastr.success('Lỗi hệ thống.')
+                }
+            })
+    }
+    function getTableOrderInfo() {
+        console.log("🚀 Đang gọi API tới:", `/order/order-of-table/${tableId}`);
+        axios.get(`/order/order-of-table/${tableId}`)
+            .then((res) => {
+                console.log("📥 API trả về:", res.data);
+                let html = '';
+                let totalPrice = 0;
+                if (!res.data || !res.data.dishes || res.data.dishes.length === 0) {
+                console.warn("⚠️ Không có món ăn nào trong order!");
+            } else {
+                console.log("✅ Có", res.data.dishes.length, "món ăn trong order.");
+            }
+                for (let i = 0; i < res.data.dishes.length; i++) {
+                    console.log(`🍽️ Món ${i + 1}:`, res.data.dishes[i]);
+
+                    html += `<tr>` +
+                        `<td>${res.data.dishes[i].menuItem.foodName}</td>` +
+                        `<td>${res.data.dishes[i].quantity}</td>` +
+                        `<td>${res.data.dishes[i].statusOrder}</td>` +
+                        `</tr>`;
+                    totalPrice += res.data.dishes[i].quantity * Number(res.data.dishes[i].menuItem.price.$numberDecimal);
+                }
+                $("#orderDataTable tbody").html(html);
+                $(".thanh-toan").attr('action', '/payment/' + res.data._id + '/order');
+                const formattedTotal = totalPrice.toLocaleString("vi-VN");
+                console.log("💰 Tổng giá:", formattedTotal, "VND");
+                $("#left-panel-total-price").text('Tổng giá: ' + formattedTotal + ' VND');
+            }).catch((err) => {
+                console.error("❌ Lỗi khi lấy thông tin order:", err.response ? err.response.data : err);
+
+                toastr.error(err.response.data.message)
+            })
+    }
+   function resetTable(tableId) {
+    console.log("🌐 Đường gọi API full:", `${window.location.origin}/tables/api/reset-table/${tableId}`);
+    fetch(`/admin/tables/api/reset-table/${tableId}`, { method: 'POST' })
+        .then(res => {
+            console.log("📥 Response status:", res.status);
+            return res.json();
+        })
+        .then(data => {
+            console.log("✅ Response data:", data);
+            toastr.success(data.message);
+            location.reload(); // 🔥 Reload để load session mới
+        })
+        .catch(err => {
+            console.error("❌ Lỗi fetch reset bàn:", err);
+            toastr.error("Lỗi reset bàn");
+        });
+}
+</script>

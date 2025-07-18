@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Waiter Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css"
+    />
+    <!-- Font Awesome -->
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- File CSS riêng -->
+    <link rel="stylesheet" href="/css/admin.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js" integrity="sha512-v8+bPcpk4Sj7CKB11+gK/FnsbgQ15jTwZamnBf/xDmiQDcgOIYufBo6Acu1y30vrk8gg5su4x0CG3zfPaq5Fcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+<!-- Sidebar -->
+<nav id="sidebar" class="bg-white border-right">
+    <!-- Thông tin user (avatar + tên + role) -->
+    <a class="navbar-brand d-flex align-items-center" href="#">
+        <!-- Ảnh logo -->
+        <img
+                src="/image/reslyy.png"
+                alt="Logo"
+                style="margin-left: 60px; width: 131px"
+                class="mr-2"
+        />
+    </a>
+    <!-- Menu -->
+    <ul class="list-unstyled components mt-3">
+        <li>
+            <a href="/order">
+                <i class="fas fa-clipboard mr-2 mb-2 mt-2"></i>Gọi món
+            </a>
+            <a href="/order/chef">
+                <i class="fas fa-clipboard mr-2 mb-2 mt-2"></i>Các món đang đợi
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<!-- Phần nội dung trang -->
+<div id="content" class="bg-light">
+    <!-- Thanh navbar trên cùng -->
+    <nav class="navbar navbar-expand navbar-dark bg-white shadow-sm">
+        <div class="user-profile text-center p-3 border-bottom">
+            <h5 class="mb-0">Xin chào</h5>
+            <span class="text-muted">Owner Restaurant</span>
+        </div>
+        <div class="user-profile text-center p-3">
+            <h5 class="mb-0 tilte-rest">Nhà hàng Thư Vãn</h5>
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="dropdown">
+                <a href="/"><i style="font-size: 24px; color: black;" class="fas fa-home"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <div>
+        <%- body %>
+        <!-- Render nội dung động -->
+    </div>
+</div>
+<!-- End #content -->
+
+<!-- JavaScript xử lý active sidebar -->
+<script>
+    $(document).ready(function () {
+        // Đánh dấu active dựa trên URL hiện tại
+        var currentPath = window.location.pathname;
+        $(".components li a").each(function () {
+            var href = $(this).attr("href");
+            if (href && currentPath.indexOf(href) !== -1) {
+                $(this).parent().addClass("active");
+            }
+        });
+
+        // Cập nhật active khi click vào mục sidebar
+        $(".components li a").on("click", function () {
+            $(".components li").removeClass("active");
+            $(this).parent().addClass("active");
+        });
+    });
+</script>
+</body>
+</html>

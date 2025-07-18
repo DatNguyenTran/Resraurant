@@ -1,0 +1,122 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>History booking</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/historyBooking.css" />
+  </head>
+
+  <body>
+    <div class="main-content">
+      <div class="profile-card">
+        <div class="profile-info">
+          <h2
+            style="text-align: center; font-weight: bold; margin-bottom: 10px"
+          >
+            Chi tiết đặt bàn
+          </h2>
+        </div>
+        <div
+          class="profile-header"
+          style="display: flex; flex-direction: column; align-items: start; padding-left: 30px;padding-right: 30px;"
+        >
+          <label class="title-history">Họ tên khách hàng:</label>
+          <p class="content-history">
+            <%= bookingDetail.customer.firstName %> <%=
+            bookingDetail.customer.lastName %>
+          </p>
+          <label class="title-history">Số điện thoại:</label>
+          <p class="content-history">
+            <%= bookingDetail.customer.phoneNumber %>
+          </p>
+          <label class="title-history">Mã bàn:</label>
+          <p class="content-history"><%= bookingDetail.table.idTable %></p>
+          <label class="title-history">Số lượng chỗ ngồi:</label>
+          <p class="content-history"><%= bookingDetail.quantity %> (+2) chỗ</p>
+          <label class="title-history">Giờ đặt bàn:</label>
+          <p class="content-history"><%= bookingDetail.orderTime %></p>
+
+          <div
+            style="display: flex; justify-content: space-between; width: 100%; align-items: flex-end;"
+          >
+            <div>
+              <label class="title-history">Ngày đặt bàn:</label>
+              <p class="content-history"><%= bookingDetail.orderDate %></p>
+              <label class="title-history">Yêu cầu thêm:</label>
+              <p class="title-history"><%= bookingDetail.request %></p>
+            </div>
+            <div>
+              <label class="title-history">Giá cọc bàn:</label>
+              <p class="content-history">
+                <%= bookingDetail.table.depositPrice %> VNĐ
+              </p>
+              <p
+                class="title-history"
+                style="
+                  background-color: #6aff68;
+                  text-align: center;
+                  padding: 3px 0px;
+                  border-radius: 10px;
+                "
+              >
+                Đã đặt cọc
+              </p>
+            </div>
+          </div>
+          <div class="profile-header" style="display: flex; align-items: center; width: 100%; justify-content: center; gap: 4px;">
+          <form action="/bookingTable/bookingDetail/<%= bookingDetail._id %>/edit" method="GET">
+              <button class="history__detail--btn history__detail--edit">Chỉnh sửa</button>
+          </form>
+          <form>
+              <button class="history__detail--btn history__detail--cancel">Huỷ bàn</button>
+          </form>
+          <form>
+              <button class="history__detail--btn history__detail--date">Đã hết hạn</button>
+          </form>
+        </div>
+        </div>
+        </div>
+    </div>
+  </body>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Lấy giờ đặt bàn từ dữ liệu EJS
+      const orderDateTime = "<%= bookingDetail.orderDate %> <%= bookingDetail.orderTime %>";
+      
+      // Chuyển đổi sang đối tượng Date
+      const bookingTime = new Date(orderDateTime.split("/").reverse().join("-") + ":00");
+      
+      // Thêm 30 phút vào giờ đặt bàn
+      const expiryTime = new Date(bookingTime.getTime() + 30 * 60000); // 30 phút
+  
+      // Lấy thời gian hiện tại
+      const now = new Date();
+  
+      // Lấy các nút cần xử lý
+      const editBtn = document.querySelector(".history__detail--edit");
+      const cancelBtn = document.querySelector(".history__detail--cancel");
+      const expiredBtn = document.querySelector(".history__detail--date");
+  
+      // Kiểm tra nếu đã quá 30 phút
+      if (now < expiryTime) {
+        // Ẩn nút "Chỉnh sửa" và "Hủy bàn"
+        editBtn.style.display = "none";
+        cancelBtn.style.display = "none";
+  
+        // Hiển thị nút "Đã hết hạn"
+        expiredBtn.style.display = "block";
+      } else {
+        // Ngược lại, hiển thị "Chỉnh sửa" và "Hủy bàn", ẩn "Đã hết hạn"
+        editBtn.style.display = "block";
+        cancelBtn.style.display = "block";
+        expiredBtn.style.display = "none";
+      }
+    });
+  </script>
+  
+</html>

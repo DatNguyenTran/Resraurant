@@ -1,0 +1,28 @@
+<head>
+    <link rel="stylesheet" href="/css/staffDetail.css">
+</head>
+
+<div class="staff-detail-container">
+    <h1>Thông tin chi tiết nhân viên</h1>
+
+    <% if (typeof successMessage !== "undefined" && successMessage) { %>
+        <div class="alert success">
+            <%= successMessage %>
+        </div>
+    <% } %>
+
+    <div class="staff-info">
+        <p><strong>Họ và Tên:</strong> <%= staff.firstName || "Chưa cập nhật" %> <%= staff.lastName || "Chưa cập nhật" %></p>
+        <p><strong>Email:</strong> <%= staff.email || "Chưa cập nhật" %></p>
+        <p><strong>Số điện thoại:</strong> <%= staff.phoneNumber || "Chưa cập nhật" %></p>
+        <p><strong>Vai trò:</strong> <%= staff.role || "Chưa cập nhật" %></p>
+        <p><strong>Trạng thái:</strong> <%= staff.status || "Chưa cập nhật" %></p>
+        <p><strong>Mức lương theo giờ:</strong> <%= salary !== 'Chưa cập nhật' ? salary.toLocaleString() + " VND" : salary %></p>
+        <p><strong>Ngày tạo tài khoản:</strong> <%= createdAt %></p>
+    </div>
+
+    <div class="action-buttons">
+        <a href="/admin/staffs/update/<%= staff._id %>" class="btn-update">Cập nhật thông tin</a>
+        <a href="/admin/staffs" class="btn-back">Quay lại danh sách</a>
+    </div>
+</div>

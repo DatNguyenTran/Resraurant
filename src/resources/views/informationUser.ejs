@@ -1,0 +1,96 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Profile Page</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/index.css" />
+  </head>
+
+  <body>
+    <div class="main-content">
+      <div class="profile-card">
+        <div class="profile-header">
+          <img src="<%= users.avatar %>" alt="Avatar" class="avatar" />
+          <div class="profile-info">
+            <h2>
+              <%= users.firstName || "" %> <%= users.lastName || "Chưa cập nhật"
+              %>
+            </h2>
+            <p class="profile-email"><%= users.email %></p>
+            <% if (user.role == "WAITER") { %>
+            <p class="profile-email">Chức vụ: Nhân viên phục vụ</p>
+            <% } %> <% if (user.role == "KITCHENSTAFF") { %>
+            <p class="profile-email">Chức vụ: Nhân viên bếp</p>
+            <% } %> <% if (user.role == "RESMANAGER") { %>
+            <p class="profile-email">Chức vụ: Quản lí</p>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="profile-details">
+          <div class="form-group">
+            <label>Họ Và Tên</label>
+            <p>
+              <%= users.firstName || "Chưa cập nhật" %> <%= users.lastName ||
+              "Chưa cập nhật" %>
+            </p>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <p><%= users.email %></p>
+          </div>
+          <div class="form-group">
+            <label>Giới Tính</label>
+            <p>
+              <%= users.gender===true ? "Nam" : users.gender===false ? "Nữ" :
+              "Không xác định" %>
+            </p>
+          </div>
+          <div class="form-group">
+            <label>Địa chỉ</label>
+            <p><%= users.address || "Chưa cập nhật" %></p>
+          </div>
+          <div class="form-group">
+            <label>Điện thoại</label>
+            <p><%= users.phoneNumber || "Chưa cập nhật" %></p>
+          </div>
+          <% if ( users.role !== "CUSTOMER" ) { %>
+          <div class="form-group">
+            <label>Mức lương</label>
+            <p><%= staff.salary %> VNĐ</p>
+          </div>
+          <% } %>
+          <p
+            style="
+              color: red;
+              padding-top: 8px;
+              padding-bottom: 8px;
+              font-size: 14px;
+            "
+          >
+            <%= typeof error !=='undefined' ? error: "" %>
+          </p>
+          <div class="edit-buttons">
+            <% if (typeof users.googleId==='undefined' ) { %>
+            <a href="/users/change-password/<%= users.id %>">
+              <button class="edit-btn">Đổi mật khẩu</button>
+            </a>
+            <%}%>
+            <a href="/users/update-profile/<%= users.id %>">
+              <button class="edit-btn">Cập nhật thông tin</button>
+            </a>
+            <% if ( users.role === "CUSTOMER" ) { %>
+            <a href="/bookingTable/bookingHistory/<%= users.id %>">
+              <button class="edit-btn">Lịch sử đặt bàn</button>
+            </a>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

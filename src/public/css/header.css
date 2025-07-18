@@ -1,0 +1,128 @@
+body {
+    font-family: 'Playfair Display', serif;
+  }
+  
+.navbar {
+    background-color: #A82825;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px 20px;
+    height: 80px;
+}
+.navbar img {
+    height: 36px;
+}
+.navbar .nav-links {
+    display: flex;
+    gap: 40px;
+}
+.navbar .nav-links a {
+    color: #F5F5F5;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 0;
+}
+
+.navbar .language-switch {
+    display: flex;
+    gap: 10px;
+}
+.navbar .language-switch a {
+    color: #F5F5F5;
+    text-decoration: none;
+    font-size: 16px;
+}
+.navbar .language-switch a.active {
+    text-decoration: underline;
+}
+
+.Res-title{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.res-name{
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    line-height: 1;
+    font-weight: bold;
+}
+
+.res--name-second{
+    font-size: 22px;
+}
+
+
+.nav-links a, .auth-links a {
+    position: relative;
+    text-decoration: none;
+    color: #FFF; /* Giữ màu trắng */
+    font-size: 18px;
+    font-weight: 500;
+    padding: 10px 15px;
+    transition: color 0.3s ease-in-out;
+}
+
+.nav-links a::after, .auth-links a::after {
+    content: "";
+    position: absolute;
+    left: 0; /* Căn underline bắt đầu từ đầu chữ */
+    bottom: -3px; /* Khoảng cách giữa chữ và underline */
+    width: 0;
+    height: 4px; /* Làm dày underline */
+    background-color: #FFF; /* Màu trắng */
+    transition: width 0.3s ease-in-out;
+}
+
+.nav-links a:hover::after, .auth-links a:hover::after {
+    width: 100%; /* Underline dài đúng với chữ */
+}
+
+.auth-links a{
+    color: #F5F5F5;
+    text-decoration: none;
+    font-size: 17px;
+    padding: 0;
+}
+
+.user-avatar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .user-avatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  .dropdown {
+    width: 100px;
+    position: absolute;
+    top: 50px;
+    right: -30px;
+    background: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    display: none; /* Ẩn mặc định */
+    z-index: 10;
+  }
+  
+  .dropdown a, .dropdown button {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+    transition: background 0.2s;
+  }
+  
+  .dropdown a:hover, .dropdown button:hover {
+    background: #f0f0f0;
+  }
+  

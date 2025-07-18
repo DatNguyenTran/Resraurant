@@ -1,0 +1,129 @@
+.container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+.text-content {
+    max-width: 50%;
+    padding: 20px;
+}
+.text-content h1 {
+    font-size: 48px;
+    color: red;
+    margin: 0;
+}
+.text-content p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+.text-content a {
+    color: red;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 20px;
+    border-bottom: 2px solid red;
+}
+.image-content {
+    max-width: 50%;
+}
+.image-content img {
+    width: 100%;
+    height: auto;
+}
+
+.gallery {
+    display: flex;
+    gap: 20px;
+}
+.gallery-item {
+    text-align: center;
+}
+.gallery-item img {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border: 1px solid #e0a16b;
+    border-radius: 5px;
+}
+.gallery-item p {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+}
+
+.image--view{
+    font-family: 'Arial, sans-serif';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px !important;
+    margin: 0;
+    background-color: #fff;
+}
+
+.booking--now {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Playfair Display', serif;
+    color: white;
+    text-align: center;
+    background-color: black;
+}
+.container-booking {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: url('/image/background2.jpg') no-repeat center center/cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.content {
+    background: white;
+    color: black;
+    padding: 20px;
+    border-radius: 10px;
+}
+h1 {
+    font-size: 3em;
+    margin: 0;
+}
+.stars {
+    color: #d4af37;
+    margin: 10px 0;
+}
+.button {
+    margin: 20px 0;
+}
+.button a {
+    text-decoration: none;
+    color: #d4af37;
+    border: 1px solid #d4af37;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+.button a:hover {
+    background-color: #d4af37;
+    color: black;
+}
+.contact-info {
+    font-size: 1em;
+}
+.contact-info a {
+    color: #d4af37;
+    text-decoration: none;
+}
+.contact-info a:hover {
+    text-decoration: underline;
+}
+
+.full-all{
+    background-color: #ffefd4;
+}

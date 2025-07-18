@@ -1,0 +1,51 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Profile Page</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/historyBooking.css" />
+  </head>
+
+  <body>
+    <div class="main-content">
+      <div class="profile-card">
+        <div class="profile-info">
+          <h2
+            style="text-align: center; font-weight: bold; margin-bottom: 10px"
+          >
+            Lịch sử đặt bàn
+          </h2>
+        </div>
+        <% if (historyBookings.length > 0 ) {
+        historyBookings.forEach(history => { %>
+
+        <div class="profile-header">
+          <div>
+            <label class="title-history">Mã bàn:</label>
+            <p class="content-history"><%= history.table.idTable %></p>
+            <div>
+              <label style="color: black; font-size: 14px">Ngày đặt:</label>
+              <p class="content-history">
+                <%= history.orderTime %>, <%= history.orderDay %>, <%=
+                history.orderDate %>
+              </p>
+            </div>
+          </div>
+          <div>
+            <form action="/bookingTable/bookingDetail/<%=history._id %>">
+              <button class="detail">Chi tiết</button>
+            </form>
+          </div>
+        </div>
+        <% }) 
+         } else { %>
+        <p>Chưa có lịch sử đặt bàn nào.</p>
+        <% } %>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý bàn</title>
+    <link rel="stylesheet" href="/css/viewTable.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+    <div class="table-container">
+        <h1>Danh sách bàn</h1>
+
+        <!-- Hiển thị thông báo nếu có -->
+        <% if (typeof successMessage !== "undefined" && successMessage) { %>
+            <div class="alert success">
+                <%= successMessage %>
+            </div>
+        <% } %>
+
+        <% if (typeof errorMessage !== "undefined" && errorMessage) { %>
+            <div class="alert error">
+                <%= errorMessage %>
+            </div>
+        <% } %>
+
+        <!-- Nút thêm bàn mới -->
+        <div class="action-bar">
+            <a href="/admin/tables/add" class="btn-create">Thêm bàn mới</a>
+        </div>
+
+        <table class="table-list">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>ID Bàn</th>
+                    <th>Số Ghế</th>
+                    <th>Mô Tả</th>
+                    <th>Ảnh</th>
+                    <th>Trạng Thái</th>
+                    <th>Loại</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (tables && tables.length > 0) { %>
+                    <% tables.forEach((table, index) => { %>
+                        <tr>
+                            <td><%= index + 1 %></td>
+                            <td><%= table.idTable %></td>
+                            <td><%= table.seatNumber %></td>
+                            <td><%= table.description %></td>
+                            <td>
+                                <% if (table.imageUrl) { %>
+                                    <img src="<%= table.imageUrl %>" alt="Ảnh bàn" class="table-image">
+                                <% } else { %>
+                                    <span class="text-muted">Không có ảnh</span>
+                                <% } %>
+                            </td>
+                            <td>
+                                <% if (table.status === "AVAILABLE") { %>
+                                    <span class="badge bg-success">Có sẵn</span>
+                                <% } else if (table.status === "RESERVED") { %>
+                                    <span class="badge bg-warning text-dark">Đã đặt</span>
+                                <% } else if (table.status === "OCCUPIED") { %>
+                                    <span class="badge bg-danger">Đang sử dụng</span>
+                                <% } else { %>
+                                    <span class="badge bg-secondary">Không xác định</span>
+                                <% } %>
+                            </td>
+                            <td>
+                                <% if (table.type === "NORMAL") { %>
+                                    <span class="badge bg-primary">Thường</span>
+                                <% } else if (table.type === "VIP") { %>
+                                    <span class="badge bg-info text-dark">VIP</span>
+                                <% } else { %>
+                                    <span class="badge bg-secondary">Không xác định</span>
+                                <% } %>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="/admin/tables/edit/<%= table._id %>" class="btn-edit">Sửa</a>
+                                    <form action="/admin/tables/delete/<%= table._id %>" method="POST" class="delete-form" id="delete-form-<%= table._id %>">
+                                        <button type="button" class="btn-delete" onclick="confirmDelete('<%= table._id %>')">Xóa</button>
+                                    </form>
+                                </div>
+                            </td>                            
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="9" class="no-result">Không tìm thấy bàn nào phù hợp!</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function confirmDelete(tableId) {
+            Swal.fire({
+                title: "Bạn có chắc chắn muốn xóa?",
+                text: "Hành động này không thể hoàn tác!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Có, xóa ngay!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById("delete-form-" + tableId).submit();
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
