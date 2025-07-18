@@ -4,7 +4,6 @@ const StaffInfor = require("../models/StaffInfor");
 const { sendMail } = require("../../config/email");
 const { genarateResetToken } = require("../../util");
 const mongoose = require("mongoose");
-
 exports.getStaffs = async (req, res) => {
   console.log("🔍 req.user =", req.user);
   try {
