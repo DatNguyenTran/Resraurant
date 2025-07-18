@@ -16,7 +16,6 @@ userRoutes.post(
   userController.upload.single("avatar"),
   userController.updateProfile
 );
-
 userRoutes.get(
   "/update-profile/:id",
   isAuth.requireAuth,
