@@ -8,7 +8,6 @@ const userRoutes = express.Router();
 
 userRoutes.use(express.json());
 userRoutes.use(express.urlencoded({ extended: true }));
-
 userRoutes.post("/", userController.create);
 userRoutes.post(
   "/update-profile/:id",
