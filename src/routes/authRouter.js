@@ -10,7 +10,6 @@ router.post("/logout", authController.postLogout);
 router.get("/verify/:resetToken", authController.getVerify);
 router.get("/new-password/:resetToken", authController.getNewPassword);
 
-//FE
 router.get("/login", siteController.index);
 router.get("/register", siteController.register);
 router.get("/reset-password", authController.getResetPassword);
