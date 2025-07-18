@@ -2,8 +2,7 @@ const Table = require("../models/Table");
 const Menu = require("../models/Menu");
 const Order = require("../models/OrderFood");
 const Revenue = require("../models/Revenue");
-const mongoose = require("mongoose")
-
+const mongoose = require("mongoose");
 exports.viewAllTables = async (req, resp) => {
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0); // Đặt thời gian về 00:00:00
@@ -12,15 +11,15 @@ exports.viewAllTables = async (req, resp) => {
   todayEnd.setHours(23, 59, 59, 999); // Đặt thời gian về 23:59:59
 
   const user = req.session.user;
-    if (!user) {
-      return resp.status(401).send("Chưa đăng nhập.");
-    }
+  if (!user) {
+    return resp.status(401).send("Chưa đăng nhập.");
+  }
 
   const tables = await Table.aggregate([
     {
       $match: {
         restaurant: new mongoose.Types.ObjectId(req.user.restaurant),
-      }
+      },
     },
     {
       $lookup: {
@@ -75,13 +74,20 @@ exports.viewAllTables = async (req, resp) => {
 
 exports.viewATable = async (req, resp) => {
   const tableId = req.params.tableId;
-  const table = await Table.findOne({ idTable: tableId, restaurant: req.user.restaurant });
+  const table = await Table.findOne({
+    idTable: tableId,
+    restaurant: req.user.restaurant,
+  });
   if (!table) {
     return resp.status(404).send("Table not found");
   }
-  const menus = await Menu.find({ restaurant: req.user.restaurant })
+  const menus = await Menu.find({ restaurant: req.user.restaurant });
   console.log("🪑 Table render ra view:", table);
-  resp.render("order/view1Table", { table, menus, layout: "layouts/mainAdmin" });
+  resp.render("order/view1Table", {
+    table,
+    menus,
+    layout: "layouts/mainAdmin",
+  });
 };
 
 exports.addDishes2Table = async (req, resp) => {
@@ -90,7 +96,10 @@ exports.addDishes2Table = async (req, resp) => {
     console.log("📥 Dữ liệu nhận từ client:", { tableId, dishes });
 
     // Lấy thông tin bàn và session hiện tại
-    const table = await Table.findOne({ _id: tableId, restaurant: req.user.restaurant });
+    const table = await Table.findOne({
+      _id: tableId,
+      restaurant: req.user.restaurant,
+    });
     if (!table) {
       console.error("❌ Không tìm thấy bàn:", tableId);
       return resp.status(404).send("Table not found with id: " + tableId);
@@ -109,11 +118,14 @@ exports.addDishes2Table = async (req, resp) => {
     const counts = Object.values(countMap);
 
     // Lấy thông tin món ăn từ DB
-    const addDishes = await Menu.find({ 
+    const addDishes = await Menu.find({
       _id: { $in: uniqueDishIds },
-      restaurant: req.user.restaurant 
+      restaurant: req.user.restaurant,
     });
-    console.log("🍽️ Món ăn tìm thấy trong DB:", addDishes.map(d => d.foodName));
+    console.log(
+      "🍽️ Món ăn tìm thấy trong DB:",
+      addDishes.map((d) => d.foodName)
+    );
 
     if (!addDishes.length) {
       console.warn("⚠️ Không tìm thấy món nào trong DB.");
@@ -124,7 +136,10 @@ exports.addDishes2Table = async (req, resp) => {
     const sortedDishes = uniqueDishIds.map((id) =>
       addDishes.find((dish) => dish._id.toString() === id)
     );
-    console.log("📦 Món ăn đã sắp xếp:", sortedDishes.map(d => d?.foodName));
+    console.log(
+      "📦 Món ăn đã sắp xếp:",
+      sortedDishes.map((d) => d?.foodName)
+    );
 
     // Tạo mảng dishes để thêm vào order
     const dishes2Add = [];
@@ -147,12 +162,12 @@ exports.addDishes2Table = async (req, resp) => {
     // Tìm order Pending hiện tại của bàn trong session hiện tại
     let order = await Order.findOne({
       table: tableId,
-      session: currentSession,  
-      statusPayment: "Pending"
+      session: currentSession,
+      statusPayment: "Pending",
     })
       .populate({
         path: "dishes.menuItem",
-        match: { restaurant: req.user.restaurant } 
+        match: { restaurant: req.user.restaurant },
       })
       .populate("table")
       .populate("bookingTable");
@@ -166,7 +181,7 @@ exports.addDishes2Table = async (req, resp) => {
         dishes: dishes2Add,
         statusPayment: "Pending",
         paymentMethod: "Cash",
-        restaurant: req.user.restaurant
+        restaurant: req.user.restaurant,
       });
       await newOrder.save();
       order = newOrder; // 👈 Gán lại để dùng tiếp phía sau
@@ -181,37 +196,46 @@ exports.addDishes2Table = async (req, resp) => {
             dishes2Add[i].menuItem._id.toString() ===
             order.dishes[j].menuItem._id.toString()
           ) {
-            console.log(`🔄 Tăng số lượng món ${order.dishes[j].menuItem.foodName}`);
+            console.log(
+              `🔄 Tăng số lượng món ${order.dishes[j].menuItem.foodName}`
+            );
             order.dishes[j].quantity += dishes2Add[i].quantity;
             found = true;
             break;
           }
         }
         if (!found) {
-          console.log(`➕ Thêm món mới vào order: ${dishes2Add[i].menuItem.foodName}`);
+          console.log(
+            `➕ Thêm món mới vào order: ${dishes2Add[i].menuItem.foodName}`
+          );
           order.dishes.push(dishes2Add[i]);
         }
       }
     }
-      // Cập nhật totalPrice cho order
-    const newTotalPrice = order.dishes?.reduce((sum, dish) => {
-      return sum + (dish.quantity * dish.menuItem.price);
-    }, 0) || 0;
+    // Cập nhật totalPrice cho order
+    const newTotalPrice =
+      order.dishes?.reduce((sum, dish) => {
+        return sum + dish.quantity * dish.menuItem.price;
+      }, 0) || 0;
     order.totalPrice = newTotalPrice;
-      
+
     await order.save();
-    console.log(`✅ Order ${order._id} đã được cập nhật. Tổng tiền: ${newTotalPrice} VND`);
+    console.log(
+      `✅ Order ${order._id} đã được cập nhật. Tổng tiền: ${newTotalPrice} VND`
+    );
 
     // 📝 Ghi doanh thu ngay khi thêm món
     await Revenue.create({
       restaurant: req.user.restaurant,
       table: table._id,
       session: currentSession,
-      amount: addedTotal, 
-      status: "PAID", 
-      description: `Ghi doanh thu khi thêm món vào bàn ${table.idTable} (session ${currentSession})`
+      amount: addedTotal,
+      status: "PAID",
+      description: `Ghi doanh thu khi thêm món vào bàn ${table.idTable} (session ${currentSession})`,
     });
-    console.log(`💰 Ghi doanh thu ${addedTotal} VND cho bàn ${table.idTable} (session ${currentSession})`);
+    console.log(
+      `💰 Ghi doanh thu ${addedTotal} VND cho bàn ${table.idTable} (session ${currentSession})`
+    );
 
     resp.json({ message: "Thêm món ăn thành công." });
   } catch (error) {
@@ -228,7 +252,12 @@ exports.getOrderOfTableID = async (req, resp) => {
     return resp.status(404).json({ error: "Không tìm thấy bàn" });
   }
 
-  const orders = await Order.find({ table: tableId, session: table.session, statusPayment: "Pending", restaurant: req.user.restaurant })
+  const orders = await Order.find({
+    table: tableId,
+    session: table.session,
+    statusPayment: "Pending",
+    restaurant: req.user.restaurant,
+  })
     .populate("dishes.menuItem")
     .populate("table")
     .populate("bookingTable");
@@ -260,7 +289,7 @@ exports.chefViewDishes = async (req, resp) => {
       {
         $match: {
           firstDishOrderDate: { $gte: startOfDay, $lte: endOfDay },
-          restaurant: new mongoose.Types.ObjectId(req.user.restaurant)
+          restaurant: new mongoose.Types.ObjectId(req.user.restaurant),
         },
       },
       { $unwind: "$dishes" }, // Unwind dishes
@@ -280,9 +309,11 @@ exports.chefGetDishesOfDay = async (req, resp) => {
     endOfDay.setHours(23, 59, 59, 999);
 
     // Lấy danh sách bàn để lấy session hiện tại của từng bàn
-    const tables = await Table.find({ restaurant: req.user.restaurant }).select('_id session');
+    const tables = await Table.find({ restaurant: req.user.restaurant }).select(
+      "_id session"
+    );
     const sessionMap = {};
-    tables.forEach(t => {
+    tables.forEach((t) => {
       sessionMap[t._id.toString()] = t.session;
     });
 
@@ -290,13 +321,13 @@ exports.chefGetDishesOfDay = async (req, resp) => {
       {
         $match: {
           restaurant: new mongoose.Types.ObjectId(req.user.restaurant),
-          createdAt: { $gte: startOfDay, $lte: endOfDay }
-        }
+          createdAt: { $gte: startOfDay, $lte: endOfDay },
+        },
       },
       {
         $addFields: {
-          firstDishOrderDate: { $arrayElemAt: ["$dishes.orderDate", 0] } // Extract dishes[0].orderDate
-        }
+          firstDishOrderDate: { $arrayElemAt: ["$dishes.orderDate", 0] }, // Extract dishes[0].orderDate
+        },
       },
       { $unwind: "$dishes" }, // Unwind dishes array
       {
@@ -304,8 +335,8 @@ exports.chefGetDishesOfDay = async (req, resp) => {
           from: "tables", // Join with Table collection
           localField: "table",
           foreignField: "_id",
-          as: "tableData"
-        }
+          as: "tableData",
+        },
       },
       { $unwind: "$tableData" }, // Convert table array to object
       {
@@ -313,20 +344,18 @@ exports.chefGetDishesOfDay = async (req, resp) => {
           from: "menus", // Join with Menu collection
           localField: "dishes.menuItem",
           foreignField: "_id",
-          as: "dishes.menuData"
-        }
+          as: "dishes.menuData",
+        },
       },
       { $unwind: "$dishes.menuData" }, // Convert menuData array to object
       {
         $match: {
           $expr: {
-            $and: [
-              { $ne: ["$dishes.statusOrder", "Hidden"] }
-            ]
-          }
-        }
+            $and: [{ $ne: ["$dishes.statusOrder", "Hidden"] }],
+          },
+        },
       },
-      { $sort: { "dishes.orderDate": 1 } } // Sort by orderDate (oldest first)
+      { $sort: { "dishes.orderDate": 1 } }, // Sort by orderDate (oldest first)
     ]);
 
     resp.json(orders);
@@ -338,7 +367,10 @@ exports.chefGetDishesOfDay = async (req, resp) => {
 
 exports.chefChangeDishStatus = async (req, resp) => {
   const { orderId, dishId, status } = req.body;
-  const order = await Order.findOne({ _id: orderId, restaurant: req.user.restaurant });
+  const order = await Order.findOne({
+    _id: orderId,
+    restaurant: req.user.restaurant,
+  });
   if (!order) {
     return resp.status(500).json({ error: "Order not found" });
   }
@@ -352,18 +384,18 @@ exports.chefChangeDishStatus = async (req, resp) => {
 };
 
 exports.hideDish = async (req, res) => {
-    try {
-        const { orderId, dishId } = req.params;
-        const result = await Order.updateOne(
-            { _id: orderId, "dishes._id": dishId },
-            { $set: { "dishes.$.statusOrder": "Hidden" } }
-        );
-        if (result.nModified === 0) {
-            return res.status(404).json({ error: "Không tìm thấy món để ẩn" });
-        }
-        res.json({ message: "Món đã được ẩn khỏi giao diện bếp." });
-    } catch (err) {
-        console.error("Lỗi ẩn món:", err);
-        res.status(500).json({ error: "Lỗi server" });
+  try {
+    const { orderId, dishId } = req.params;
+    const result = await Order.updateOne(
+      { _id: orderId, "dishes._id": dishId },
+      { $set: { "dishes.$.statusOrder": "Hidden" } }
+    );
+    if (result.nModified === 0) {
+      return res.status(404).json({ error: "Không tìm thấy món để ẩn" });
     }
+    res.json({ message: "Món đã được ẩn khỏi giao diện bếp." });
+  } catch (err) {
+    console.error("Lỗi ẩn món:", err);
+    res.status(500).json({ error: "Lỗi server" });
+  }
 };

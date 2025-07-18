@@ -1,159 +1,182 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><%= title %></title>
-  <!-- Bootstrap CSS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-  <style>
-    .card-summary {
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .card-summary:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    }
-    .card-title {
-      font-size: 1.63rem;
-      font-weight: bold;
-    }
-    .card-text {
-      color: #6c757d;
-    }
-  </style>
-</head>
-<body>
-  <div class="container-fluid mt-4">
-    <h4 class="mb-4">Chào mừng Admin đến với Hệ Thống Báo Cáo!</h4>
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-3">
-      <!-- Card 1: Tổng số nhà hàng -->
-      <div class="col">
-        <div class="card text-center card-summary">
-          <div class="card-body">
-            <h5 class="card-title"><%= totalRestaurants %></h5>
-            <p class="card-text">Tổng số nhà hàng</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 2: Tổng số người dùng -->
-      <div class="col">
-        <div class="card text-center card-summary">
-          <div class="card-body">
-            <h5 class="card-title"><%= totalUsers %></h5>
-            <p class="card-text">Tổng số người dùng</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3: Tổng gói tháng -->
-      <div class="col">
-        <div class="card text-center card-summary">
-          <div class="card-body">
-            <h5 class="card-title"><%= totalMonthlyPlans %></h5>
-            <p class="card-text">Tổng gói tháng</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 4: Tổng gói năm -->
-      <div class="col">
-        <div class="card text-center card-summary">
-          <div class="card-body">
-            <h5 class="card-title"><%= totalYearlyPlans %></h5>
-            <p class="card-text">Tổng gói năm</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 5: Tổng doanh thu -->
-      <div class="col">
-        <div class="card text-center card-summary">
-          <div class="card-body">
-            <h5 class="card-title">
-              <%= totalRevenue.toLocaleString("vi-VN") %> VND
-            </h5>
-            <p class="card-text">Tổng doanh thu</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Biểu đồ doanh thu -->
-    <div class="row mt-4">
-      <div class="col-md-12">
-        <div class="card mb-4">
-          <div class="card-header">Doanh thu toàn hệ thống theo tháng</div>
-          <div class="card-body">
-            <canvas id="systemRevenueChart"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Data cho Chart -->
-  <div id="system-revenue-data"
-       data-system-revenue='<%= systemRevenue %>'
-       style="display: none;"></div>
-
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-  <script>
-    const el = document.getElementById("system-revenue-data");
-    const systemRevenue = JSON.parse(el.dataset.systemRevenue);
-
-    const months = [
-      "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
-      "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
-    ];
-    const revenueData = new Array(12).fill(0);
-
-    systemRevenue.forEach(item => {
-      revenueData[item._id - 1] = item.total;
-    });
-
-    const ctx = document.getElementById("systemRevenueChart").getContext("2d");
-    new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: months,
-        datasets: [{
-          label: "Doanh thu toàn hệ thống",
-          data: revenueData,
-          backgroundColor: "#4e73df",
-          borderColor: "#4e73df",
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: true, position: "top" },
-          tooltip: {
-            callbacks: {
-              label: ctx => ctx.dataset.label + ": " + ctx.parsed.y.toLocaleString("vi-VN") + " VND"
-            }
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: { display: true, text: "Doanh thu (VND)" },
-            ticks: {
-              callback: val => val.toLocaleString("vi-VN")
-            }
-          },
-          x: {
-            title: { display: true, text: "Tháng" }
-          }
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title><%= title %></title>
+    <!-- Bootstrap CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+      .card-summary {
+        transition: transform 0.2s, box-shadow 0.2s;
       }
-    });
-  </script>
+      .card-summary:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+      .card-title {
+        font-size: 1.63rem;
+        font-weight: bold;
+      }
+      .card-text {
+        color: #6c757d;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid mt-4">
+      <h4 class="mb-4">Chào mừng Admin đến với Hệ Thống Báo Cáo!</h4>
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-3">
+        <!-- Card 1: Tổng số nhà hàng -->
+        <div class="col">
+          <div class="card text-center card-summary">
+            <div class="card-body">
+              <h5 class="card-title"><%= totalRestaurants %></h5>
+              <p class="card-text">Tổng số nhà hàng</p>
+            </div>
+          </div>
+        </div>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+        <!-- Card 2: Tổng số người dùng -->
+        <div class="col">
+          <div class="card text-center card-summary">
+            <div class="card-body">
+              <h5 class="card-title"><%= totalUsers %></h5>
+              <p class="card-text">Tổng số người dùng</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Tổng gói tháng -->
+        <div class="col">
+          <div class="card text-center card-summary">
+            <div class="card-body">
+              <h5 class="card-title"><%= totalMonthlyPlans %></h5>
+              <p class="card-text">Tổng gói tháng</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Tổng gói năm -->
+        <div class="col">
+          <div class="card text-center card-summary">
+            <div class="card-body">
+              <h5 class="card-title"><%= totalYearlyPlans %></h5>
+              <p class="card-text">Tổng gói năm</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5: Tổng doanh thu -->
+        <div class="col">
+          <div class="card text-center card-summary">
+            <div class="card-body">
+              <h5 class="card-title">
+                <%= totalRevenue.toLocaleString("vi-VN") %> VND
+              </h5>
+              <p class="card-text">Tổng doanh thu</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Biểu đồ doanh thu -->
+      <div class="row mt-4">
+        <div class="col-md-12">
+          <div class="card mb-4">
+            <div class="card-header">Doanh thu toàn hệ thống theo tháng</div>
+            <div class="card-body">
+              <canvas id="systemRevenueChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data cho Chart -->
+    <div
+      id="system-revenue-data"
+      data-system-revenue="<%= systemRevenue %>"
+      style="display: none"
+    ></div>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script>
+      const el = document.getElementById("system-revenue-data");
+      const systemRevenue = JSON.parse(el.dataset.systemRevenue);
+
+      const months = [
+        "Tháng 1",
+        "Tháng 2",
+        "Tháng 3",
+        "Tháng 4",
+        "Tháng 5",
+        "Tháng 6",
+        "Tháng 7",
+        "Tháng 8",
+        "Tháng 9",
+        "Tháng 10",
+        "Tháng 11",
+        "Tháng 12",
+      ];
+      const revenueData = new Array(12).fill(0);
+
+      systemRevenue.forEach((item) => {
+        revenueData[item._id - 1] = item.total;
+      });
+
+      const ctx = document
+        .getElementById("systemRevenueChart")
+        .getContext("2d");
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: months,
+          datasets: [
+            {
+              label: "Doanh thu toàn hệ thống",
+              data: revenueData,
+              backgroundColor: "#4e73df",
+              borderColor: "#4e73df",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: true, position: "top" },
+            tooltip: {
+              callbacks: {
+                label: (ctx) =>
+                  ctx.dataset.label +
+                  ": " +
+                  ctx.parsed.y.toLocaleString("vi-VN") +
+                  " VND",
+              },
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: "Doanh thu (VND)" },
+              ticks: {
+                callback: (val) => val.toLocaleString("vi-VN"),
+              },
+            },
+            x: {
+              title: { display: true, text: "Tháng" },
+            },
+          },
+        },
+      });
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>
