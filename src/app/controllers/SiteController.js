@@ -11,7 +11,6 @@ class SiteController {
     if (req.session.user) {
       return res.redirect("/");
     }
-
     const isTrial = req.query.trial === "true";
     const guestId = req.query.guestId;
     const plan = req.query.plan;
