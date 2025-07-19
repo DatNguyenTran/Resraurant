@@ -1,0 +1,159 @@
+/* Container chính */
+.schedule-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề */
+.schedule-container h1 {
+    text-align: center;
+    color: #d32f2f; /* Màu đỏ giống layout */
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* Thanh hành động */
+.action-bar {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.btn-back {
+    background: #d32f2f; /* Màu đỏ giống layout */
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    display: inline-block;
+}
+
+.btn-back:hover {
+    background: #b71c1c;
+}
+
+/* Thanh tìm kiếm */
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.search-label {
+    font-weight: bold;
+    color: #333;
+    font-size: 16px;
+}
+
+.search-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 200px;
+    transition: border-color 0.3s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #1976d2; /* Màu xanh giống header bảng */
+    box-shadow: 0 0 5px rgba(25, 118, 210, 0.3);
+}
+
+.btn-search {
+    background: #1976d2; /* Màu xanh giống header bảng */
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.btn-search:hover {
+    background: #1565c0;
+}
+
+.btn-clear {
+    background: #d32f2f; /* Màu đỏ giống layout */
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.btn-clear:hover {
+    background: #b71c1c;
+}
+
+/* Bảng lịch làm */
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+}
+
+.schedule-table th,
+.schedule-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.schedule-table th {
+    background: #1976d2; /* Màu xanh header giống layout */
+    color: white;
+    font-weight: bold;
+}
+
+.schedule-table tr:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+.schedule-table tr:hover {
+    background-color: #e0e0e0;
+}
+
+/* Cột không có dữ liệu */
+.no-result {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+}
+
+/* Nút hành động */
+.btn-update {
+    background: #1976d2; /* Màu xanh giống layout */
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+.btn-update:hover {
+    background: #1565c0;
+}
+
+.btn-delete {
+    background: #d32f2f; /* Màu đỏ giống layout */
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background: #b71c1c;
+}

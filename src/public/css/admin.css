@@ -1,0 +1,199 @@
+/* Đặt lại font và màu tổng thể */
+body {
+  background-color: #f4f7f6;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* Sidebar */
+#sidebar {
+  width: 260px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: linear-gradient(135deg, #A82825, #8C1D1A);
+  color: white;
+  padding-top: 20px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;    /* ✅ lúc này thanh cuộn mới hoạt động */
+  overflow-x: hidden;
+  z-index: 1030;    
+}
+
+#sidebar::-webkit-scrollbar{
+  width: 6px;
+}
+#sidebar::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.3);
+  border-radius: 3px;
+}
+#sidebar:hover::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.6);
+}
+
+#sidebar a.navbar-brand img {
+  width: 140px;
+  margin-left: 60px;
+}
+
+/* Sidebar Menu */
+#sidebar .components {
+  list-style: none;
+  padding-left: 0;
+}
+
+#sidebar .components li a {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  border-radius: 6px;
+  transition: all 0.3s ease-in-out;
+}
+
+#sidebar .components li a:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(5px);
+}
+
+#sidebar .components li.active > a {
+  background: rgba(255, 255, 255, 0.3);
+  font-weight: bold;
+}
+
+/* Icon trong sidebar */
+#sidebar .components li a i {
+  margin-right: 10px;
+}
+
+/* Nội dung chính */
+#content {
+  margin-left: 260px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  min-height: 100vh;
+}
+/* Navbar chính */
+.navbar {
+  background: rgba(255, 255, 255, 0.8); /* Nền mờ nhẹ */
+  backdrop-filter: blur(10px); /* Hiệu ứng Glassmorphism */
+  border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+}
+
+/* Hồ sơ người dùng */
+.user-profile {
+  text-align: center;
+  padding: 10px 20px;
+}
+
+.user-profile h5 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 2px;
+}
+
+.user-profile span {
+  font-size: 14px;
+  color: #777;
+}
+
+/* Tiêu đề nhà hàng */
+.tilte-rest {
+  font-size: 22px;
+  font-weight: bold;
+  color: #A82825;
+}
+
+/* Icon trang chủ */
+.navbar .fa-home {
+  font-size: 26px;
+  color: #444;
+  transition: all 0.3s ease-in-out;
+}
+
+.navbar .fa-home:hover {
+  color: #A82825;
+  transform: scale(1.1) rotate(-5deg);
+}
+
+
+/* Card - Thiết kế hiện đại */
+.card {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-header {
+  background: white;
+  font-weight: 600;
+  border-bottom: 2px solid #ddd;
+}
+
+/* Nút bấm */
+.btn-primary {
+  background: #A82825;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-primary:hover {
+  background: #8C1D1A;
+  transform: scale(1.05);
+}
+
+/* Form input */
+.form-control {
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #A82825;
+  box-shadow: 0 0 8px rgba(168, 40, 37, 0.2);
+}
+
+/* Bảng quản lý */
+.table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table thead {
+  background: #A82825;
+  color: white;
+}
+
+.table tbody tr:hover {
+  background: #f8d7da;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 15px 0;
+  background: #202020;
+  color: white;
+  margin-top: 20px;
+}

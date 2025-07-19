@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tạo bài viết mới</title>
+  <link rel="stylesheet" href="/css/createNews.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+  <body>
+    <header class="news-header">
+      <button class="btn-return fas fa-chevron-left fa-lg" onclick="window.location.href='/owner/adminNews'"></button>
+      <h1>Tạo tin tức mới</h1>
+    </header>
+    <div class="form-wrapper">
+      <div class="form-container">
+        <form id="createNewsForm" onsubmit="handleFormSubmit(event)">
+          <div class="food-form">
+            <label for="title">Tiêu đề tin tức</label>
+            <input type="text" id="title" name="title" placeholder="Nhập tiêu đề bài viết" required>
+
+            <label for="description">Nội dung</label>
+            <textarea 
+              id="description" 
+              name="content" 
+              placeholder="Nhập nội dung bài viết"
+              rows="6"
+              required
+            ></textarea>
+
+            <label for="foodImage">Ảnh tin tức</label>
+            <input 
+              type="file" 
+              id="foodImage" 
+              name="image" 
+              accept="image/*"
+              required 
+            />
+
+            <button type="submit" class="submit-btn">Tạo tin tức</button>
+          </div>
+        </form>  
+      </div>
+    </div>
+
+    <script>
+      async function handleFormSubmit(event) {
+        event.preventDefault();
+        const form = document.getElementById("createNewsForm");
+        const formData = new FormData(form);
+    
+        try {
+          const response = await fetch("/owner/adminNews", {
+            method: "POST",
+            body: formData
+          });
+    
+          const data = await response.json();
+    
+          if (data.success) {
+            Swal.fire({
+              title: "Hoàn tất!",
+              text: "🎉 Tạo bài viết thành công",
+              icon: "success",
+              confirmButtonText: "OK",
+            }).then(() => {
+              window.location.href = "/owner/adminNews";
+            });
+          } else {
+            Swal.fire({
+              title: "Lỗi!",
+              text: data.message,
+              icon: "error",
+              confirmButtonText: "Thử lại",
+            });
+          }
+        } catch (error) {
+          Swal.fire({
+            title: "Lỗi!",
+            text: "Có lỗi xảy ra khi gửi dữ liệu.",
+            icon: "error",
+            confirmButtonText: "Thử lại",
+          });
+        }
+      }
+    </script>  
+  </body>
+</html>

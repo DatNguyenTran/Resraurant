@@ -1,0 +1,118 @@
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng ký - Resly</title>
+    <link rel="stylesheet" href="/css/register.css" />
+</head>
+
+<body>
+    <div class="form-wrapper">
+        <h2>Đăng ký</h2>
+        <h4>(Hãy chọn ngân hàng và điền đúng stk để hiện mã QR)</h4>
+        <form action="/auth/sign-up" method="post">
+            <% if (typeof trial !== "undefined" && trial === "true") { %>
+                <input type="hidden" name="trial" value="true" />
+            <% } %>
+
+            <% if (typeof guestId !== "undefined") { %>
+                <input type="hidden" name="guestId" value="<%= guestId %>" />
+            <% } %>
+            <% if (typeof plan !== "undefined") { %>
+                <input type="hidden" name="plan" value="<%= plan %>" />
+            <% } %>
+            
+             <div class="form-control">
+                <input type="text" name="restaurantOwnerName" required>
+                <label>Họ và Tên</label>
+            </div>
+            <div class="form-control">
+                <input type="text" name="restaurantName" required>
+                <label>Tên nhà hàng</label>
+            </div>
+            <div class="form-control">
+                <select name="bankCode" required>
+                    <option value="">Chọn ngân hàng</option>
+                    <option value="970436">Vietcombank (VCB)</option>
+                    <option value="970407">Techcombank (TCB)</option>
+                    <option value="970418">BIDV</option>
+                    <option value="970422" data-name="MBBank">MBBank</option>
+                    <option value="970415">VietinBank</option>
+                    <option value="970405">Agribank</option>
+                    <option value="970423">TPBank</option>
+                    <option value="970443">VPBank</option>
+                    <option value="970432">Sacombank</option>
+                </select>
+            </div>
+            <div class="form-control">
+                <input type="text" name="accountName" required>
+                <label>Tên tài khoản ngân hàng</label>
+            </div>
+            <div class="form-control">
+                <input type="text" name="accountNo" required>
+                <label>Số tài khoản ngân hàng</label>
+            </div>
+            <div class="form-control">
+                <input type="email" name="email" required>
+                <label>Email </label>
+            </div>
+            <div class="form-control">
+                <input type="number" name="phone" required>
+                <label>Số điện thoại </label>
+            </div>
+            <div class="form-control">
+                <input type="password" name="password" required>
+                <label>Mật khẩu</label>
+            </div>
+            <div class="form-control">
+                <input type="password" name="confirmPassword" required>
+                <label>Nhập lại mật khẩu</label>
+            </div>
+            <button type="submit">Đăng ký</button>
+            <% if (typeof error !=='undefined' ) { %>
+                <p style="color: red; padding-top: 8px; padding-bottom: 8px; font-size: 16px; text-align: center;">
+                    <%= typeof error !=='undefined' ? error: "" %>
+                </p>
+            <% } %>
+        </form>
+        <div class="back-home">
+           <a href="/">← Quay lại trang chủ</a></p>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const passwordInput = document.querySelector("input[name='password']");
+            const confirmPasswordInput = document.querySelector("input[name='confirmPassword']");
+            const submitButton = document.querySelector("button[type='submit']");
+            const errorText = document.createElement("p");
+
+            errorText.style.color = "red";
+            errorText.style.paddingTop = "8px";
+            errorText.style.fontSize = "14px";
+            errorText.style.textAlign = "center";
+
+            confirmPasswordInput.parentNode.appendChild(errorText);
+
+            function validatePasswords() {
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+
+                if (password.length < 8) {
+                    errorText.textContent = "⚠ Mật khẩu phải có ít nhất 8 ký tự.";
+                    submitButton.disabled = true;
+                } else if (password !== confirmPassword) {
+                    errorText.textContent = "⚠ Mật khẩu không khớp.";
+                    submitButton.disabled = true;
+                } else {
+                    errorText.textContent = "";
+                    submitButton.disabled = false;
+                }
+            }
+
+            passwordInput.addEventListener("input", validatePasswords);
+            confirmPasswordInput.addEventListener("input", validatePasswords);
+        });
+    </script>
+
+</body>

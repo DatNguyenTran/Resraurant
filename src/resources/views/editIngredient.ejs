@@ -1,0 +1,76 @@
+<head>
+  <link rel="stylesheet" href="/css/ingredients.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<div class="table-container">
+  <h1>Quản lý kho</h1>
+
+  <div class="search-bar">
+    <form action="/admin/editIngredient" method="GET">
+      <input type="text" name="search" placeholder="Tìm nguyên liệu..."
+             value="<%= searchQuery %>">
+      <button type="submit">Tìm</button>
+    </form>
+  </div>
+
+  <div class="action-bar">
+    <a href="/admin/editIngredient/create" class="btn-create">Thêm nguyên liệu</a>
+  </div>
+
+  <table class="table-list">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Tên nguyên liệu</th>
+        <th>Số lượng</th>
+        <th>Đơn vị</th>
+        <th>Ghi chú</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (ingredients.length) { %>
+        <% ingredients.forEach((ing, idx) => { %>
+          <tr>
+            <td><%= idx + 1 %></td>
+            <td><%= ing.name        %></td>
+            <td><%= ing.quantity    %></td>
+            <td><%= ing.unit        %></td>
+            <td><%= ing.note || '-' %></td>
+            <td>
+              <div class="action-buttons">
+                <a  href="/admin/editIngredient/edit/<%= ing._id %>"  class="btn-edit">Sửa</a>
+                <form id="del-<%= ing._id %>"
+                      action="/admin/editIngredient/delete/<%= ing._id %>"
+                      method="POST" >
+                  <button type="button"
+                          class="btn-delete"
+                          onclick="confirmDelete('<%= ing._id %>')">Xóa</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        <% }) %>
+      <% } else { %>
+        <tr><td colspan="6" class="no-result">Kho chưa có dữ liệu</td></tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  function confirmDelete(id){
+    Swal.fire({
+      title:"Xóa nguyên liệu?",
+      text:"Hành động này không thể hoàn tác!",
+      icon:"warning",
+      showCancelButton:true,
+      confirmButtonColor:"#d33",
+      cancelButtonColor:"#3085d6",
+      confirmButtonText:"Xóa"
+    }).then(r=>{
+      if(r.isConfirmed) document.getElementById("del-"+id).submit();
+    });
+  }
+</script>

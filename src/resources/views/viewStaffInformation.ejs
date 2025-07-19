@@ -1,0 +1,85 @@
+<head>
+    <link rel="stylesheet" href="/css/viewStaff.css">
+</head>
+
+<div class="employee-container">
+    <h1>Danh sách nhân viên</h1>
+
+    <!-- Hiển thị thông báo nếu có -->
+    <% if (typeof successMessage !== "undefined" && successMessage) { %>
+      <div class="alert success">
+        <%= successMessage %>
+      </div>
+    <% } %>
+
+    <% if (typeof errorMessage !== "undefined" && errorMessage) { %>
+      <div class="alert error">
+        <%= errorMessage %>
+      </div>
+    <% } %>
+
+    <!-- Thanh tìm kiếm -->
+    <div class="search-bar">
+        <form action="/admin/staffs" method="GET">
+            <input type="text" name="search" placeholder="Nhập tên nhân viên..." 
+                   value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
+
+            <!-- Dropdown lọc theo vai trò -->
+            <select class="dropdown-role" name="role">
+                <option value="" <%= typeof selectedRole !== 'undefined' && selectedRole === "" ? "selected" : "" %>>Tất cả vai trò</option>
+                <option value="WAITER" <%= typeof selectedRole !== 'undefined' && selectedRole === "WAITER" ? "selected" : "" %>>Nhân viên phục vụ</option>
+                <option value="KITCHENSTAFF" <%= typeof selectedRole !== 'undefined' && selectedRole === "KITCHENSTAFF" ? "selected" : "" %>>Nhân viên phụ bếp</option>
+            </select>
+
+            <button type="submit">Tìm kiếm</button>
+        </form>
+    </div>
+
+    <!-- Nút tạo nhân viên -->
+    <div class="action-bar">
+      <a href="/admin/staffs/create" class="btn-create">Tạo nhân viên mới</a>
+    </div>
+
+    <table class="employee-table">
+        <thead>
+            <tr>
+                <th>No</th> <!-- Cột số thứ tự -->
+                <th>Tên</th>
+                <th>Email</th>
+                <th>Số điện thoại</th>
+                <th>Vai trò</th>
+                <th>Hành động</th>
+                <th>Xem chi tiết thông tin</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (staffs && staffs.length > 0) { %>
+                <% staffs.forEach((staff, index) => { %>
+                    <tr>
+                        <td><%= index + 1 %></td> <!-- Hiển thị số thứ tự -->
+                        <td><%= staff.firstName %> <%= staff.lastName %></td>
+                        <td><%= staff.email %></td>
+                        <td><%= staff.phoneNumber %></td>
+                        <td><%= staff.role %></td>
+                        <td>
+                            <form action="/admin/staffs/lock/<%= staff._id %>" method="POST">
+                                <% if (staff.status === "ACTIVE") { %>
+                                    <button type="submit" class="btn-lock">Khóa</button>
+                                <% } else { %>
+                                    <button type="submit" class="btn-unlock">Hủy Khóa</button>
+                                <% } %>
+                            </form>
+                        </td>
+                        <td>
+                            <a href="/admin/staffs/detail/<%= staff._id %>" class="btn-view-detail">Xem chi tiết</a>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } else { %>
+                <tr>
+                    <td colspan="7" class="no-result">Không tìm thấy nhân viên nào phù hợp!</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>

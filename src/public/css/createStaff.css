@@ -1,0 +1,98 @@
+/* Container chính */
+.staff-container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Tiêu đề form */
+.form-title {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+/* Nhóm input */
+.input-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Style cho dropdown (select) */
+.input-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #fff;
+  appearance: none; /* Ẩn mũi tên mặc định của trình duyệt */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); /* Thêm mũi tên tùy chỉnh */
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  cursor: pointer;
+}
+
+.input-group select:focus {
+  outline: none;
+  border-color: #28a745;
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
+}
+
+/* Nút bấm */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.btn-submit {
+  background: #28a745;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-submit:hover {
+  background: #218838;
+}
+
+.btn-back {
+  background: #dc3545;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  display: inline-block;
+}
+
+.btn-back:hover {
+  background: #c82333;
+  color: white;
+  text-decoration: none;
+}

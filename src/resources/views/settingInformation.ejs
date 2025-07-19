@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông tin nhà hàng</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <!-- Hiển thị thông tin -->
+        <div class="card p-4">
+            <p><strong>Tên nhà hàng:</strong> <%= restaurantInfo.restaurantName %></p>
+            <p><strong>Địa chỉ:</strong> <%= restaurantInfo.address %></p>
+            <p><strong>Giờ mở cửa:</strong> 
+                <%= restaurantInfo.openingHours ? new Date(restaurantInfo.openingHours).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }) : "Chưa cập nhật" %>
+            </p>
+            <p><strong>Giờ đóng cửa:</strong> 
+                <%= restaurantInfo.closingHours ? new Date(restaurantInfo.closingHours).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }) : "Chưa cập nhật" %>
+            </p>
+            
+            <p><strong>Ngày mở cửa:</strong> <%= restaurantInfo.openingDay %></p>
+            <p><strong>Ngày đóng cửa:</strong> <%= restaurantInfo.closingDay %></p>
+            <p><strong>Hotline:</strong> <%= restaurantInfo.hotline %></p>
+            <p><strong>Email:</strong> <%= restaurantInfo.email %></p>
+            <p><strong>Social Links:</strong> <%= restaurantInfo.social.join(", ") %></p>
+        </div>
+
+        <!-- Nút cập nhật -->
+        <button class="btn btn-primary mt-3" data-toggle="modal" data-target="#updateModal">Cập nhật thông tin</button>
+    </div>
+
+    <!-- Modal Cập nhật -->
+    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cập nhật thông tin</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form action="/restaurantInfor/updateInforRes?_method=PUT" method="POST" onsubmit="return validateForm()">
+                        <div class="form-group">
+                            <label>Tên nhà hàng</label>
+                            <input type="text" name="restaurantName" class="form-control" value="<%= restaurantInfo.restaurantName %>" required>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label>Địa chỉ</label>
+                            <input type="text" name="address" class="form-control" value="<%= restaurantInfo.address %>" required>
+                        </div>
+                    
+                        <!-- Chọn ngày mở cửa -->
+                        <div class="form-group">
+                            <label>Ngày mở cửa</label>
+                            <select name="openingDay" id="openingDay" class="form-control" required>
+                                <option value="1" <%= restaurantInfo.openingDay === "1" ? "selected" : "" %>>Thứ Hai</option>
+                                <option value="2" <%= restaurantInfo.openingDay === "2" ? "selected" : "" %>>Thứ Ba</option>
+                                <option value="3" <%= restaurantInfo.openingDay === "3" ? "selected" : "" %>>Thứ Tư</option>
+                                <option value="4" <%= restaurantInfo.openingDay === "4" ? "selected" : "" %>>Thứ Năm</option>
+                                <option value="5" <%= restaurantInfo.openingDay === "5" ? "selected" : "" %>>Thứ Sáu</option>
+                                <option value="6" <%= restaurantInfo.openingDay === "6" ? "selected" : "" %>>Thứ Bảy</option>
+                                <option value="7" <%= restaurantInfo.openingDay === "7" ? "selected" : "" %>>Chủ Nhật</option>
+                            </select>
+                        </div>
+                    
+                        <!-- Chọn ngày đóng cửa -->
+                        <div class="form-group">
+                            <label>Ngày đóng cửa</label>
+                            <select name="closingDay" id="closingDay" class="form-control" required>
+                                <option value="1" <%= restaurantInfo.closingDay === "1" ? "selected" : "" %>>Thứ Hai</option>
+                                <option value="2" <%= restaurantInfo.closingDay === "2" ? "selected" : "" %>>Thứ Ba</option>
+                                <option value="3" <%= restaurantInfo.closingDay === "3" ? "selected" : "" %>>Thứ Tư</option>
+                                <option value="4" <%= restaurantInfo.closingDay === "4" ? "selected" : "" %>>Thứ Năm</option>
+                                <option value="5" <%= restaurantInfo.closingDay === "5" ? "selected" : "" %>>Thứ Sáu</option>
+                                <option value="6" <%= restaurantInfo.closingDay === "6" ? "selected" : "" %>>Thứ Bảy</option>
+                                <option value="7" <%= restaurantInfo.closingDay === "7" ? "selected" : "" %>>Chủ Nhật</option>
+                            </select>
+                        </div>
+                    
+                        <!-- Giờ mở cửa -->
+                        <div class="form-group">
+                            <label>Giờ mở cửa</label>
+                            <input type="time" name="openingHours" id="openingHours" class="form-control" 
+                            value="<%= restaurantInfo.openingHours ? new Date(restaurantInfo.openingHours).toISOString().substring(11, 16) : '' %>" 
+                            required>  
+                        </div>
+                    
+                        <!-- Giờ đóng cửa -->
+                        <div class="form-group">
+                            <label>Giờ đóng cửa</label>
+                            <input type="time" name="closingHours" id="closingHours" class="form-control" 
+                            value="<%= restaurantInfo.closingHours ? new Date(restaurantInfo.closingHours).toISOString().substring(11, 16) : '' %>" 
+                            required>    
+                        </div>
+                    
+                        <div class="form-group">
+                            <label>Hotline</label>
+                            <input type="text" name="hotline" class="form-control" value="<%= restaurantInfo.hotline %>" required>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" class="form-control" value="<%= restaurantInfo.email %>" required>
+                        </div>
+                    
+                        <button type="submit" class="btn btn-success">Lưu thay đổi</button>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function validateForm() {
+            const openingDay = parseInt(document.getElementById("openingDay").value);
+            const closingDay = parseInt(document.getElementById("closingDay").value);
+            const openingHours = document.getElementById("openingHours").value;
+            const closingHours = document.getElementById("closingHours").value;
+    
+            // Kiểm tra ngày mở cửa phải nhỏ hơn ngày đóng cửa
+            if (openingDay > closingDay) {
+                alert("Ngày mở cửa không được lớn hơn ngày đóng cửa!");
+                return false;
+            }
+    
+            // Kiểm tra giờ mở cửa phải nhỏ hơn giờ đóng cửa
+            if (openingHours >= closingHours) {
+                alert("Giờ mở cửa phải nhỏ hơn giờ đóng cửa!");
+                return false;
+            }
+    
+            return true;
+        }
+    </script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

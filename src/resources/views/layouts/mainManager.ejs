@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Manager Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <!-- File CSS riêng -->
+    <link rel="stylesheet" href="/css/admin.css" />
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <nav id="sidebar" class="bg-white border-right">
+      <!-- Thông tin user (avatar + tên + role) -->
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <!-- Ảnh logo -->
+        <img
+          src="/image/resly.png"
+          alt="Logo"
+          style="margin-left: 60px; width: 131px"
+          class="mr-2"
+        />
+      </a>
+      <!-- Menu -->
+      <ul class="list-unstyled components mt-3">
+        <li>
+          <a href="/admin/staffs"><i class="fas fa-users mr-2 mb-2 mt-2"></i>Quản lý nhân viên</a>
+        </li>
+        <li>
+          <a href="/admin/tables"><i class="fas fa-table mr-2 mb-2 mt-2"></i>Quản lý bàn</a>
+        </li>
+        <li>
+          <a href="/bookingTable/management"
+            ><i class="fas fa-clipboard mr-2 mb-2 mt-2"></i>Quản lý đặt bàn</a
+          >
+        </li>
+        <li>
+          <a href="/admin/editMenu"><i class="fas fa-utensils mr-2 mb-2 mt-2"></i>Quản lý món ăn</a>
+        </li>
+        <li>
+          <a href="/admin/takeCare"
+            ><i class="fas fa-clock mr-2 mb-2 mt-2"></i>Quản lý lịch làm</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Phần nội dung trang -->
+    <div id="content" class="bg-light">
+      <!-- Thanh navbar trên cùng -->
+      <nav class="navbar navbar-expand navbar-dark bg-white shadow-sm">
+        <div class="user-profile text-center p-3 border-bottom">
+          <h5 class="mb-0">Xin chào</h5>
+          <span class="text-muted">Manager Restaurant</span>
+        </div>
+        <div class="user-profile text-center p-3">
+          <h5 style="font-size: 32px; color: #A82825; margin-right: 114px;" class="mb-0 tilte-rest">HỆ THỐNG QUẢN LÝ NHÀ HÀNG</h5>
+        </div>
+        <div class="d-flex align-items-center">
+          <div class="dropdown">
+              <a href="/menu"><i style="font-size: 24px; color: black;" class="fas fa-home"></i></a>
+          </div>
+        </div>
+      </nav>
+
+      <div>
+        <%- body %>
+        <!-- Render nội dung động -->
+      </div>
+    </div>
+    <!-- End #content -->
+
+    <!-- Bootstrap + jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript xử lý active sidebar -->
+    <script>
+      $(document).ready(function () {
+        // Đánh dấu active dựa trên URL hiện tại
+        var currentPath = window.location.pathname;
+        $(".components li a").each(function () {
+          var href = $(this).attr("href");
+          if (href && currentPath.indexOf(href) !== -1) {
+            $(this).parent().addClass("active");
+          }
+        });
+
+        // Cập nhật active khi click vào mục sidebar
+        $(".components li a").on("click", function () {
+          $(".components li").removeClass("active");
+          $(this).parent().addClass("active");
+        });
+      });
+    </script>
+  </body>
+</html>
