@@ -3,7 +3,6 @@ const router = express.Router();
 const tablesController = require("../app/controllers/TablesController");
 const isAuth = require("../app/middlewares/is-auth");
 const isPermissions = require("../app/middlewares/isPermissions");
-
 // GET: List all tables
 router.get(
   "/",
