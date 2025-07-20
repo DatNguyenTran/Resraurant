@@ -1,0 +1,136 @@
+.container-takecare {
+    max-width: 90%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+}
+
+/* Tiêu đề trang */
+.container-takecare h2 {
+    text-align: center;
+    color: #333;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+/* Bảng TakeCare */
+.table-takecare {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table-takecare thead {
+    background-color: #007bff;
+    color: white;
+}
+
+.table-takecare th, .table-takecare td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.table-takecare tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.table-takecare tbody tr:hover {
+    background-color: #e2e6ea;
+}
+
+/* Nút hành động */
+.btn-primary-takecare {
+    background-color: #007bff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.btn-primary-takecare:hover {
+    background-color: #0056b3;
+}
+
+/* Nút tạo TakeCare mới */
+.btn-success-takecare {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s;
+    margin-top: 25px;
+}
+
+.btn-success-takecare:hover {
+    background-color: #218838;
+    color: white;
+    text-decoration: none;
+}
+
+
+.no-data {
+    text-align: center;
+    font-size: 16px;
+    color: #dc3545;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.btn-update-takecare {
+    background-color: #f1c40f;
+    color: #fff;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.btn-update-takecare:hover {
+    background-color: #f39c12;
+}
+
+.btn-delete-takecare {
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-delete-takecare:hover {
+    background-color: #c0392b;
+}
+
+.btn-detail-takecare {
+    background-color: #007bff;
+    color: white;
+    padding: 6px 12px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 5px;
+    font-size: 14px;
+    display: inline-block;
+}
+.btn-detail-takecare:hover {
+    background-color: #0056b3;
+    color: white;
+    text-decoration: none;
+}
+

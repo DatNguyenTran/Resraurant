@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo TakeCare</title>
+    <link rel="stylesheet" href="/css/createTakeCare.css">
+</head>
+<body>
+    <div class="container-takecare">
+        <h2>Tạo Lịch Làm</h2>
+
+        <% if (errorMessage) { %>
+            <p class="alert error"><%= errorMessage %></p>
+        <% } %>
+
+        <form class="form-takecare" action="/admin/takeCare/create" method="POST" onsubmit="return validateForm()">
+            
+            <div class="form-group">
+                <label for="staffId">Chọn Nhân Viên:</label>
+                <select class="form-select-takecare" name="staffId" id="staffId" required>
+                    <% if (staffs && staffs.length > 0) { %>
+                        <% staffs.forEach(staff => { %>
+                            <option value="<%= staff._id %>" data-role="<%= staff.role %>">
+                                <%= staff.firstName %> <%= staff.lastName %> - <%= staff.email %> (<%= staff.role %>)
+                            </option>
+                        <% }); %>
+                    <% } else { %>
+                        <option disabled>Không có nhân viên nào</option>
+                    <% } %>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="date">Ngày:</label>
+                <input type="date" class="form-control-takecare" name="date" id="date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="startTime">Giờ Bắt Đầu:</label>
+                <input type="time" class="form-control-takecare" name="startTime" id="startTime" required>
+            </div>
+
+            <div class="form-group">
+                <label for="endTime">Giờ Kết Thúc:</label>
+                <input type="time" class="form-control-takecare" name="endTime" id="endTime" required>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn-success-takecare">Tạo Lịch Làm</button>
+                <a href="/admin/takeCare" class="btn-back-takecare">Quay về danh sách</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').setAttribute('min', today);
+        });
+    </script>
+
+    <script>
+        // Hàm validate form
+        function validateForm() {
+            const staffSelect = document.getElementById('staffId');
+            const selectedOption = staffSelect.options[staffSelect.selectedIndex];
+            const role = selectedOption ? selectedOption.getAttribute('data-role') : '';
+
+            // Kiểm tra thời gian bắt đầu và kết thúc
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+
+            // Chuyển thời gian thành giờ và phút để so sánh
+            const startHours = parseInt(startTime.split(':')[0], 10);
+            const startMinutes = parseInt(startTime.split(':')[1], 10);
+            const endHours = parseInt(endTime.split(':')[0], 10);
+            const endMinutes = parseInt(endTime.split(':')[1], 10);
+
+            // Giới hạn thời gian từ 06:00 đến 23:00
+            const minHour = 6;  // 6h sáng
+            const maxHour = 23; // 23h đêm
+
+            // Kiểm tra giờ bắt đầu
+            if (startHours < minHour || (startHours === minHour && startMinutes < 0) || startHours > maxHour || (startHours === maxHour && startMinutes > 0)) {
+                alert("Giờ bắt đầu phải nằm trong khoảng từ 06:00 đến 23:00. Vui lòng nhập lại.");
+                return false;
+            }
+
+            // Kiểm tra giờ kết thúc
+            if (endHours < minHour || (endHours === minHour && endMinutes < 0) || endHours > maxHour || (endHours === maxHour && endMinutes > 0)) {
+                alert("Giờ kết thúc phải nằm trong khoảng từ 06:00 đến 23:00. Vui lòng nhập lại.");
+                return false;
+            }
+
+            // Kiểm tra giờ kết thúc phải sau giờ bắt đầu
+            if (startHours > endHours || (startHours === endHours && startMinutes >= endMinutes)) {
+                alert("Giờ kết thúc phải sau giờ bắt đầu. Vui lòng nhập lại.");
+                return false;
+            }
+
+            return true;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {});
+    </script>
+</body>
+</html>

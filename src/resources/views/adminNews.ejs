@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Danh sách bài viết</title>
+  <link rel="stylesheet" href="/css/adminNews.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+<body>
+
+<header class="news-header">
+  <h1>Danh sách tin tức</h1>
+  <button class="btn-add" onclick="window.location.href='/owner/adminNews/add'">
+    <i class="fas fa-plus"></i>
+  </button>
+</header>
+
+<main class="news-container">
+  <% if (newsList && newsList.length > 0) { %>
+    <div class="news-list">
+      <% newsList.forEach((article) => { %>
+        <div class="news-item">
+          <div class="news-item-left">
+            <img 
+              src="<%= article.image %>"
+              alt="<%= article.title %>"
+            />
+          </div>
+
+          <div class="news-item-right">
+            <div class="news-top-row">
+              <h3 class="news-title">
+                <a href="/owner/adminNews/detail/<%= article._id %>">
+                  <%= article.title %>
+                </a>
+              </h3>
+            </div>
+
+            <div class="news-middle-row">
+              <p class="news-content clamped">
+                <%= article.content %>...
+              </p>
+            </div>
+
+            <div class="news-bottom-row">
+              <div class="news-actions">
+                <button class="btn-edit" onclick="editNews('<%= article._id %>')">✏️ Sửa</button>
+                <button class="btn-delete" onclick="deleteNews('<%= article._id %>')">🗑️ Xóa</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p>Hiện không có bài viết nào.</p>
+  <% } %>
+</main>
+
+<script>
+  function editNews(id) {
+    window.location.href = '/owner/adminNews/edit/' + id;
+  }
+
+  function deleteNews(id) {
+    Swal.fire({
+      title: 'Xác nhận xóa bài viết',
+      text: 'Bạn có chắc chắn muốn xóa bài viết này?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Xóa',
+      cancelButtonText: 'Hủy',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch('/owner/adminNews/' + id, { method: 'DELETE' })
+          .then(res => res.json())
+          .then(data => {
+            Swal.fire('Đã xóa!', 'Bài viết đã được xóa.', 'success')
+              .then(() => {
+                window.location.reload();
+              });
+          })
+          .catch(err => console.error(err));
+      }
+    });
+  }
+</script>
+
+</body>
+</html>

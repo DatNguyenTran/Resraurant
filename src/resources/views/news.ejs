@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tin Tức Nhà Hàng</title>
+  <link rel="stylesheet" href="/css/news.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+    <header class="blog-header" data-aos="fade-up" data-aos-delay="100">
+      <p class="blog-category">BLOG NHÀ HÀNG</p>
+      <h1 class="blog-title">Tin Tức & Chia Sẻ</h1>
+      <p class="blog-description">
+        Cập nhật thông tin mới nhất, mẹo quản lý nhà hàng và trải nghiệm thực tế từ khách hàng của chúng tôi.
+      </p>
+    </header>
+      
+
+  <div class="container">
+    <div class="news-items">
+      <% if (news && news.length > 0) { %>
+        <% news.forEach((article) => { %>
+          <div class="news-item" data-aos="fade-up" data-aos-delay="100">
+            <div class="news-item-image">
+              <a href="/news/<%= article._id %>">
+                <img alt="<%= article.title %>" class="img-responsive" src="<%= article.image %>"/>
+              </a>
+            </div>
+            <div class="news-item-content">
+              <a href="/news/<%= article._id %>" class="news-item-title">
+                <%= article.title %>
+              </a>
+              <p class="news-item-description clamped">
+                <%= article.content %>...
+              </p>
+              <div class="news-item-footer">
+                <p class="news-item-date">
+                  📅 Ngày đăng: <%= new Date(article.createdAt).toLocaleDateString('vi-VN') %>
+                </p>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p>Chưa có tin tức nào.</p>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

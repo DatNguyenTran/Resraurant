@@ -1,0 +1,107 @@
+<head>
+    <link rel="stylesheet" href="/css/updateStaff.css">
+</head>
+
+<div class="update-staff-container">
+    <h1>Cập nhật thông tin nhân viên</h1>
+
+    <% if (typeof successMessage !== "undefined" && successMessage) { %>
+        <div class="alert success">
+            <%= successMessage %>
+        </div>
+    <% } %>
+
+    <form action="/admin/staffs/update/<%= staff._id %>" method="POST" class="update-form" onsubmit="return validateForm()">
+        <div class="input-group">
+            <label>Họ</label>
+            <input type="text" name="firstName" required value="<%= staff.firstName %>">
+        </div>
+
+        <div class="input-group">
+            <label>Tên</label>
+            <input type="text" name="lastName" required value="<%= staff.lastName %>">
+        </div>
+
+        <div class="input-group">
+            <label>Email</label>
+            <input type="email" name="email" required value="<%= staff.email %>">
+        </div>
+
+        <div class="input-group">
+            <label>Số điện thoại</label>
+            <input type="text" name="phoneNumber" required value="<%= staff.phoneNumber %>">
+        </div>
+
+        <div class="input-group">
+            <label>Vai trò</label>
+            <select name="role" required>
+                <option value="WAITER" <%= staff.role === "WAITER" ? "selected" : "" %>>Nhân viên phục vụ</option>
+                <option value="KITCHENSTAFF" <%= staff.role === "KITCHENSTAFF" ? "selected" : "" %>>Nhân viên bếp</option>
+                <option value="RESMANAGER" <%= staff.role === "RESMANAGER" ? "selected" : "" %>>Quản lý nhà hàng</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Mức lương theo giờ</label>
+            <input type="number" id="salary" name="salary" required value="<%= salary %>" oninput="checkSalary()">
+            <p id="salaryWarning" class="salary-warning" style="color: rgb(207, 207, 20); display: none; font-weight: bold;">
+                ⚠ Cảnh báo: Mức lương quá cao!
+            </p>
+        </div>
+
+        <!-- Nhóm nút để nhìn đẹp hơn -->
+        <div class="button-group">
+            <button type="submit" class="btn-submit">Lưu thay đổi</button>
+            <a href="/admin/staffs/detail/<%= staff._id %>" class="btn-back">Quay lại</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Function to validate the form
+    function validateForm() {
+        const firstName = document.querySelector('input[name="firstName"]').value;
+        const lastName = document.querySelector('input[name="lastName"]').value;
+        const phoneNumber = document.querySelector('input[name="phoneNumber"]').value;
+
+        // Kiểm tra độ dài số điện thoại (tối đa 11 số)
+        if (phoneNumber.length > 11) {
+            alert("Số điện thoại không được dài quá 11 số. Vui lòng nhập lại.");
+            return false;
+        }
+
+        // Kiểm tra độ dài họ (firstName) và tên (lastName) - tối đa 50 ký tự
+        const maxNameLength = 15;
+        if (firstName.length > maxNameLength) {
+            alert("Họ không được dài quá 15 ký tự. Vui lòng nhập lại.");
+            return false;
+        }
+        if (lastName.length > maxNameLength) {
+            alert("Tên không được dài quá 15 ký tự. Vui lòng nhập lại.");
+            return false;
+        }
+
+        // Kiểm tra mức lương
+        const salaryInput = document.getElementById("salary");
+        const maxSalary = 20000000;
+        if (parseInt(salaryInput.value) > maxSalary) {
+            alert("Mức lương quá cao! Vui lòng nhập lại.");
+            return false;
+        }
+
+        return true;
+    }
+
+    // Function to check salary
+    function checkSalary() {
+        const salaryInput = document.getElementById("salary");
+        const warning = document.getElementById("salaryWarning");
+        const maxSalary = 20000000;
+
+        if (parseInt(salaryInput.value) > maxSalary) {
+            warning.style.display = "block";
+        } else {
+            warning.style.display = "none";
+        }
+    }
+</script>

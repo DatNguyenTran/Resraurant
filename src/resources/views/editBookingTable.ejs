@@ -1,0 +1,139 @@
+<head>
+  <link rel="stylesheet" href="/css/bookingTable.css" />
+  <script>
+     <% if (bookings.length > 0) { %>
+        window.bookings = <%- JSON.stringify(bookings) %>; // Lưu danh sách bàn đã đặt
+    <% } else { %>
+        window.bookings = []; // Lưu danh sách bàn đã đặt
+    <% } %>
+  </script>
+  <script src="/js/bookingTable.js"></script>
+</head>
+<body>
+  <div class="container-bookingTable">
+    <div class="container">
+      <div style="margin-top: 20px; margin-bottom: 20px" class="image-section">
+        <img
+          alt="A variety of buffet dishes displayed on a table. Text overlay: 'Ăn buffet mãi mê không giới hạn thời gian. Hotline: 0905 455 033 - 0905 435 033. 209/5 Nguyễn Văn Thoại, Sơn Trà, Đà Nẵng'"
+          src="/image/map.jpg"
+        />
+      </div>
+      <div class="form-section">
+        <h1>cẬP NHẬP BÀN!</h1>
+        <p>Nhà hàng Thư Vãn Đà Nẵng luôn hân hạnh được phục vụ bạn</p>
+        <form id="formEdit" action="/bookingTable/bookingUpdate/<%= bookingTable._id %>?_method=PUT" method="POST">
+          <div class="form-group">
+            <label for="name"> Họ và Tên </label>
+            <input
+              id="name"
+              readonly
+              value="<%=user.firstName %> <%=user.lastName %>"
+              type="text"
+            />
+          </div>
+          <div class="form-group">
+            <label for="phone"> Số điện thoại </label>
+            <input
+              id="phone"
+              readonly
+              value="<%=user.phoneNumber %>"
+              type="text"
+            />
+          </div>
+          <div class="form-group">
+            <label for="date"> Ngày đặt </label>
+            <input
+              id="date"
+              name="dateBooking"
+              value="<%=bookingTable.orderDate %>"
+              placeholder="dd/mm/yyyy"
+              type="date"
+            />
+          </div>
+          <div class="form-group">
+            <label for="time"> Thời gian </label>
+            <input
+              id="time"
+              name="timeBooking"
+              value="<%=bookingTable.orderTime %>"
+              placeholder="--:-- --"
+              type="time"
+            />
+          </div>
+          <div class="form-group">
+            <label for="guests">Chọn bàn</label>
+            <% if ( tables.length > 0 ) { %>
+            <div class="table-list">
+              <% tables.forEach(table=> { %>
+              <div
+                class="table-card disabled"
+                id="table-<%= table._id %>"
+                data-table-id="<%= table._id %>"
+              >
+                <div class="table-id">Bàn <%= table.idTable %></div>
+                <div class="deposit-price">
+                  Giá đặt cọc: <%= table.depositPrice %>
+                </div>
+                <div class="table-seat">
+                  Số ghế: <%= table.seatNumber %> (+2)
+                </div>
+                <div class="table-status unknown">Chưa xác định</div>
+              </div>
+              <% }) %>
+            </div>
+            <% } else { %>
+            <p>Chưa có bàn nào trong cửa hàng</p>
+            <% } %>
+          </div>
+
+          <input type="hidden" id="selectedTableId" name="selectedTableId" />
+
+          <div class="form-group">
+            <label for="email"> Email xác nhận đặt bàn </label>
+            <input readonly value="<%= user.email %>" />
+          </div>
+          <div class="form-group">
+            <label for="requests"> Yêu cầu thêm </label>
+            <textarea
+              id="requests"
+              name="requests"
+              placeholder="Nhập yêu cầu cần hỗ trợ..."
+              rows="4"
+              readonly
+            ><%= bookingTable.requests %>
+            </textarea>
+          </div>
+
+          <div class="form-group">
+            <input type="submit" value="Cập nhập" />
+          </div>
+          <a
+            href="javascript:void(0);"
+            onclick="window.history.back();"
+            class="btn-back"
+            >Quay lại</a
+          >
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.querySelector("#formEdit");
+      const selectedTableInput = document.getElementById("selectedTableId");
+      console.log("Xin chào", selectedTableInput.value);
+      console.log(form);
+
+      form.addEventListener("submit", function (event) {
+        console.log("Đã click");
+        if (
+          !selectedTableInput.value ||
+          selectedTableInput.value.trim() === ""
+        ) {
+          event.preventDefault();
+          alert("Vui lòng chọn một bàn trước khi đặt!");
+        }
+      });
+    });
+  </script>
+</body>
