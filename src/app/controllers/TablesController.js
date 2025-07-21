@@ -2,6 +2,7 @@ const Table = require("../models/Table");
 const cloudinary = require("../../config/cloudinary/index");
 const multer = require("multer");
 
+
 const storage = multer.memoryStorage();
 exports.upload = multer({ storage: storage });
 
