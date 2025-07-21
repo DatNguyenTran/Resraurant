@@ -1,6 +1,5 @@
 const express = require('express');
 const eventSpecialsController = require('../controllers/eventSpecialsController');
-
 const eventSpecialsRoutes = express.Router();
 
 eventSpecialsRoutes.use(express.json());
