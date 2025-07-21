@@ -7,7 +7,6 @@ const mongoose = require("mongoose")
 exports.viewAllTables = async (req, resp) => {
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0); // Đặt thời gian về 00:00:00
-
   const todayEnd = new Date();
   todayEnd.setHours(23, 59, 59, 999); // Đặt thời gian về 23:59:59
 
