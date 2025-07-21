@@ -8,13 +8,11 @@ const { sendMail } = require("../../config/email");
 const { genarateResetToken } = require("../../util");
 const RestaurantInfor = require("../models/RestaurantInfor");
 const SubscriptionLog = require("../models/SubscriptionLog");
-
 const cloudinary = require("../../config/cloudinary/index.js");
 const multer = require("multer");
 const fs = require("fs");
 const stream = require("stream");
 const passport = require("passport");
-
 const storage = multer.memoryStorage();
 
 exports.upload = multer({ storage: storage });
