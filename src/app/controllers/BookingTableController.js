@@ -5,7 +5,6 @@ const User = require("../models/User");
 const Table = require("../models/Table");
 const mongoose = require("mongoose");
 const moment = require("moment");
-
 const bankId = process.env.BANK_ID;
 const accountNo = process.env.ACCOUNT_NO;
 

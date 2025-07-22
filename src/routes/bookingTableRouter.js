@@ -51,4 +51,5 @@ bookingRouter.post(
   bookingTableController.markAsPaid
 )
 
+
 module.exports = bookingRouter;
