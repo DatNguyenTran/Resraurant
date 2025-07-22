@@ -38,7 +38,6 @@ const ownerRoutes = require('./ownerRouter')
   app.use("/", isAuth.setUser, getFooterData, siteRouter);
   app.use('/order', orderRoutes);
   app.use('/admin', isAuth.setUser, checkSubscription, adminRouter);
-
   app.use("/bookingTable", bookingRouter);
   app.use("/payment", payment);
   app.use("/users", userRoutes);
@@ -46,6 +45,7 @@ const ownerRoutes = require('./ownerRouter')
   app.use('/admin/takeCare', takeCareRouter);
   app.use('/admin/tables', tableRouter);
   app.use("/admin/editIngredient", isAuth.requireAuth, ingredientsRouter);
+  
 }
 
 module.exports = routes;
