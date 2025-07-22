@@ -13,7 +13,6 @@
         <% if (errorMessage) { %>
             <p class="alert error"><%= errorMessage %></p>
         <% } %>
-
         <form class="form-takecare" action="/admin/takeCare/create" method="POST" onsubmit="return validateForm()">
             
             <div class="form-group">
@@ -52,14 +51,12 @@
             </div>
         </form>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('date').setAttribute('min', today);
         });
     </script>
-
     <script>
         // Hàm validate form
         function validateForm() {
@@ -101,7 +98,7 @@
 
             return true;
         }
-
+        //document
         document.addEventListener('DOMContentLoaded', () => {});
     </script>
 </body>
