@@ -13,10 +13,8 @@ exports.getStaffs = async (req, res) => {
                 message: "Không xác định được nhà hàng người dùng."
             });
         }
-
         const searchQuery = req.query.search ? req.query.search.trim() : ""; 
         const roleFilter = req.query.role && req.query.role.trim() !== "" ? req.query.role.trim() : null; 
-
         // Loại bỏ cả CUSTOMER và RESOWNER
         let queryCondition = {
             role: { $nin: ["CUSTOMER", "RESOWNER"] },
@@ -29,8 +27,7 @@ exports.getStaffs = async (req, res) => {
                 { lastName: { $regex: new RegExp(searchQuery, "i") } }
             ];
         }
-
-        // ❌ Fix lỗi: Khi tạo nhân viên xong, không áp dụng lọc role mặc định
+        // Fix lỗi: Khi tạo nhân viên xong, không áp dụng lọc role mặc định
         if (roleFilter !== null) {
             queryCondition.role = roleFilter;
         }

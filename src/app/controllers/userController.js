@@ -499,14 +499,12 @@ exports.updateProfile = async (req, res) => {
             updatedData.avatar = avatarUrl;
             req.session.user.avatar = avatarUrl;
           }
-
           // Update user info in the databa se
           User.findByIdAndUpdate(userId, updatedData, { new: true })
             .then((updatedUser) => {
               if (!updatedUser) {
                 return res.status(404).json({ message: "User not found" });
               }
-
               // Update the session with the latest user info
               req.session.user = updatedUser;
 
