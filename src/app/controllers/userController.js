@@ -498,7 +498,8 @@ exports.updateProfile = async (req, res) => {
               if (!updatedUser) {
                 return res.status(404).json({ message: "User not found" });
               }
-              // Update the session with the latest userifo
+
+              // Update the session with the latest user info
               req.session.user = updatedUser;
               // Render the updated profile page
               return res.render("updateProfile", {

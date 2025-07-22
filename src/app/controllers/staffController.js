@@ -12,6 +12,7 @@ exports.getStaffs = async (req, res) => {
         message: "Không xác định được nhà hàng người dùng.",
       });
     }
+
     const searchQuery = req.query.search ? req.query.search.trim() : "";
     const roleFilter =
       req.query.role && req.query.role.trim() !== ""
