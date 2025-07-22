@@ -24,11 +24,13 @@ userRoutes.get(
   isAuth.requireAuth,
   userController.renderChangePasswordPage
 );
+
 userRoutes.post(
   "/change-password/:id",
   isAuth.requireAuth,
   userController.changePassword
 );
+
 userRoutes.put(
   "/change-password/:id",
   isAuth.requireAuth,
