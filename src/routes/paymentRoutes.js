@@ -13,10 +13,12 @@ paymentRouter.get(
   isAuth.requireAuth,
   paymentController.paymentOrder
 );
+
 paymentRouter.get(
   "/subscription/payment/:plan",
   paymentController.paymentSubscription
 );
+
 paymentRouter.get(
   "/:description/checkPaid",
   paymentController.checkPaid
