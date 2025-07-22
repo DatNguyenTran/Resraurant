@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const tablesContainer = document.querySelector(".table-list");
   const selectedTableInput = document.getElementById("selectedTableId");
   const warnElm = document.getElementById("timeWarn");
-
   /** 🕒 Không cho chọn ngày trong quá khứ */
   const today = new Date().toISOString().split("T")[0];
   dateInput.setAttribute("min", today);
