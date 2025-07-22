@@ -5,6 +5,7 @@ const userController = require("../app/controllers/userController");
 const isPermissions = require("../app/middlewares/isPermissions");
 
 const userRoutes = express.Router();
+
 userRoutes.use(express.json());
 userRoutes.use(express.urlencoded({ extended: true }));
 
@@ -15,6 +16,7 @@ userRoutes.post(
   userController.upload.single("avatar"),
   userController.updateProfile
 );
+
 userRoutes.get(
   "/update-profile/:id",
   isAuth.requireAuth,
