@@ -45,6 +45,7 @@ bookingRouter.post(
   isAuth.requireAuth,
   bookingTableController.createBooking
 );
+
 bookingRouter.post(
   "/bookingDetail/:id/markPaid",
   isAuth.requireAuth,
