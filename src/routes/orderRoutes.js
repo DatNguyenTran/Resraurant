@@ -37,5 +37,4 @@ router.put(
 );
 router.put('/hide-dish/:orderId/:dishId', isAuth.requireAuth, orderController.hideDish);
 
-
 module.exports = router;

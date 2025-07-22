@@ -7,7 +7,6 @@ const mongoose = require("mongoose")
 exports.viewAllTables = async (req, resp) => {
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0); // Đặt thời gian về 00:00:00
-
   const todayEnd = new Date();
   todayEnd.setHours(23, 59, 59, 999); // Đặt thời gian về 23:59:59
 
@@ -83,7 +82,6 @@ exports.viewATable = async (req, resp) => {
   console.log("🪑 Table render ra view:", table);
   resp.render("order/view1Table", { table, menus, layout: "layouts/mainAdmin" });
 };
-
 exports.addDishes2Table = async (req, resp) => {
   try {
     const { tableId, dishes } = req.body;
@@ -98,7 +96,7 @@ exports.addDishes2Table = async (req, resp) => {
     const currentSession = table.session;
     console.log("✅ Tìm thấy bàn:", table.idTable, "Session:", currentSession);
 
-    // Đếm số lượng từng món
+    //Đếm số lượng từng món
     const countMap = dishes.reduce((acc, dishId) => {
       acc[dishId] = (acc[dishId] || 0) + 1;
       return acc;
@@ -108,7 +106,7 @@ exports.addDishes2Table = async (req, resp) => {
     const uniqueDishIds = Object.keys(countMap);
     const counts = Object.values(countMap);
 
-    // Lấy thông tin món ăn từ DB
+    //Lấy thông tin món ăn từ DB
     const addDishes = await Menu.find({ 
       _id: { $in: uniqueDishIds },
       restaurant: req.user.restaurant 
@@ -119,7 +117,6 @@ exports.addDishes2Table = async (req, resp) => {
       console.warn("⚠️ Không tìm thấy món nào trong DB.");
       return resp.status(404).json({ message: "No dishes found" });
     }
-
     // Sắp xếp món ăn theo thứ tự gọi
     const sortedDishes = uniqueDishIds.map((id) =>
       addDishes.find((dish) => dish._id.toString() === id)
@@ -129,7 +126,6 @@ exports.addDishes2Table = async (req, resp) => {
     // Tạo mảng dishes để thêm vào order
     const dishes2Add = [];
     let addedTotal = 0;
-
     for (let i = 0; i < sortedDishes.length; i++) {
       const dishPrice = Number(sortedDishes[i].price) * counts[i];
       addedTotal += dishPrice;

@@ -52,6 +52,7 @@ const TEST_MODE = true;
 
       const cleanedDescription = description.replace(/-/g, "").toLowerCase();
       
+      
       transactions.forEach((tx, idx) => {
         const rawDesc = tx["Mô tả"];
         const cleaned = rawDesc?.replace(/\s/g, "").toLowerCase();
