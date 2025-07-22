@@ -38,7 +38,6 @@ class BookingTableController {
         restaurantInfor.openingHours = moment(restaurantInfor.openingHours).format("HH:mm");
         restaurantInfor.closingHours = moment(restaurantInfor.closingHours).format("HH:mm");
       }
-
       console.log(restaurantInfor)
       const bookings = await BookingTable.find({ orderDate: { $gte: today } });
       return res.render("bookingTable", {
@@ -54,7 +53,6 @@ class BookingTableController {
       });
     }
   };
-
   listBookingManagement = async (req, res, next) => {
     try {
       const bookings = await BookingTable.find()
