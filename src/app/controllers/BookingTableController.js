@@ -54,7 +54,6 @@ class BookingTableController {
       });
     }
   };
-
   listBookingManagement = async (req, res, next) => {
     try {
       const bookings = await BookingTable.find()
@@ -81,7 +80,6 @@ class BookingTableController {
       res.status(500).json({ message: err.message });
     }
   };
-
   createBooking = async (req, res) => {
   try {
     const moment = require("moment");
@@ -97,7 +95,7 @@ class BookingTableController {
 
     const expiresAt = new Date(Date.now() + 30 * 60 * 1000); // thời hạn thanh toán 1 phút
 
-    // ✅ Đến đây thì giờ hợp lệ → tiếp tục tạo hoặc lấy booking
+    //  Đến đây thì giờ hợp lệ → tiếp tục tạo hoặc lấy booking
     let bookings = await BookingTable.findOne({
       table: selectedTableId,
       isPaid: false,
@@ -118,7 +116,7 @@ class BookingTableController {
       bookings = await bookingTable.save();
     }
 
-    // Định dạng để hiển thị ra trang thanh toán 
+    //Định dạng để hiển thị ra trang thanh toán 
     const orderDate = moment.utc(bookings.orderDate);
     const formattedBooking = {
       ...bookings.toObject(),
@@ -142,7 +140,6 @@ class BookingTableController {
     res.status(400).json({ message: error.message });
   }
 };
-
 
   updateForm = async (req, res) => {
     try {
