@@ -36,7 +36,6 @@ userRoutes.put(
   isAuth.requireAuth,
   userController.changePassword
 );
-
 userRoutes.use("/:id", (req, res, next) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.render("errorpage");
