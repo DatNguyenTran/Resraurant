@@ -488,18 +488,21 @@ exports.updateProfile = async (req, res) => {
             address: req.body.address,
             gender: req.body.gender,
           };
+
           if (avatarUrl) {
             updatedData.avatar = avatarUrl;
             req.session.user.avatar = avatarUrl;
           }
+
           // Update user info in the databa se
           User.findByIdAndUpdate(userId, updatedData, { new: true })
             .then((updatedUser) => {
               if (!updatedUser) {
                 return res.status(404).json({ message: "User not found" });
               }
-              // Update the session with the latest user info
+              // Update the session with the latest userifo
               req.session.user = updatedUser;
+
               // Render the updated profile page
               return res.render("updateProfile", {
                 successMessage: "Cập nhật thông tin cá nhân thành công",
@@ -515,6 +518,7 @@ exports.updateProfile = async (req, res) => {
             });
         }
       );
+
       // Upload the avatar stream to Cloudinary
       const bufferStream = new stream.PassThrough();
       bufferStream.end(req.file.buffer);
@@ -529,6 +533,7 @@ exports.updateProfile = async (req, res) => {
         address: req.body.address,
         gender: req.body.gender,
       };
+
       // If no avatar was uploaded, update only the other user data
       User.findByIdAndUpdate(userId, updatedData, { new: true })
         .then((updatedUser) => {
