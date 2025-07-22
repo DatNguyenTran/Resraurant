@@ -506,7 +506,6 @@ exports.updateProfile = async (req, res) => {
               if (!updatedUser) {
                 return res.status(404).json({ message: "User not found" });
               }
-
               // Update the session with the latest user info
               req.session.user = updatedUser;
 
@@ -603,16 +602,13 @@ exports.findById = async (req, res) => {
     const userId = req.params.id;
     const user = await User.findById(userId);
     let staffInfor = null;
-
     if (!user) {
       return res.render("errorpage");
     }
-
     if (user.role != "CUSTOMER") {
       staffInfor = await Staff.findOne({ staff: userId });
     }
     console.log(staffInfor);
-
     const error = req.query.error || "";
     res.render("informationUser", { users: user, staff: staffInfor, error });
   } catch (error) {
@@ -684,7 +680,6 @@ exports.changePassword = async (req, res) => {
         userId,
       });
     }
-
     const hashedPassword = await bcrypt.hash(newPassword, 12);
     user.password = hashedPassword;
     await user.save();

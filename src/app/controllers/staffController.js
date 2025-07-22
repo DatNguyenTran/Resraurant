@@ -13,7 +13,6 @@ exports.getStaffs = async (req, res) => {
                 message: "Không xác định được nhà hàng người dùng."
             });
         }
-
         const searchQuery = req.query.search ? req.query.search.trim() : ""; 
         const roleFilter = req.query.role && req.query.role.trim() !== "" ? req.query.role.trim() : null; 
 
@@ -242,7 +241,7 @@ exports.createStaff = async (req, res) => {
             });
         }
 
-        // 2️⃣ Kiểm tra mật khẩu có khớp không
+        // 2️ Kiểm tra mật khẩu có khớp không
         // if (password !== confirmPassword) {
         //     return res.render("createStaff", {
         //         layout: "layouts/mainAdmin",
@@ -252,15 +251,15 @@ exports.createStaff = async (req, res) => {
         //     });
         // }
 
-        // 3️⃣ Mã hóa mật khẩu
-      // 3️⃣ Mã hóa mật khẩu
+        // 3️ Mã hóa mật khẩu
+      // 3️ Mã hóa mật khẩu
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        // 4️⃣ Kiểm tra và gán role hợp lệ
+        // 4️ Kiểm tra và gán role hợp lệ
         const validRoles = ["WAITER", "KITCHENSTAFF", "RESMANAGER"];
         const selectedRole = validRoles.includes(role) ? role : "WAITER"; // Đã sửa lỗi cú pháp
 
-        // 5️⃣ Tạo tài khoản nhân viên
+        // 5️ Tạo tài khoản nhân viên
         const newUser = new User({
             firstName,
             lastName,
@@ -272,10 +271,10 @@ exports.createStaff = async (req, res) => {
             restaurant: req.user.restaurant,
         });
 
-        // 6️⃣ Lưu nhân viên vào database
+        // 6️ Lưu nhân viên vào database
         await newUser.save();
 
-        // 7️⃣ Thêm mức lương vào `StaffInfor`
+        // 7️ Thêm mức lương vào `StaffInfor`
         const newStaffInfor = new StaffInfor({
             staff: newUser._id,
             salary: salary,
@@ -284,7 +283,7 @@ exports.createStaff = async (req, res) => {
 
         await newStaffInfor.save();
 
-        // 8️⃣ Gửi email kích hoạt tài khoản (nếu cần)
+        // 8️ Gửi email kích hoạt tài khoản (nếu cần)
         try {
             const resetToken = await genarateResetToken();
             newUser.resetToken = resetToken;
@@ -295,7 +294,7 @@ exports.createStaff = async (req, res) => {
             console.error("Lỗi gửi email:", err);
         }
 
-        // 9️⃣ Load lại danh sách toàn bộ nhân viên sau khi tạo
+        // 9️ Load lại danh sách toàn bộ nhân viên sau khi tạo
         return res.redirect("/admin/staffs?role="); // ✅ Reset bộ lọc role để hiển thị tất cả nhân viên
 
     } catch (error) {
@@ -308,7 +307,6 @@ exports.createStaff = async (req, res) => {
         });
     }
 };
-
 
 exports.lockStaff = async (req, res) => {
     const { id } = req.params;
