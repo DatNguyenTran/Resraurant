@@ -7,7 +7,6 @@
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 /* Tiêu đề */
 .schedule-container h1 {
     text-align: center;
@@ -15,13 +14,11 @@
     font-size: 28px;
     margin-bottom: 20px;
 }
-
-/* Thanh hành động */
+/* Thanh hành động staff */
 .action-bar {
     text-align: right;
     margin-bottom: 20px;
 }
-
 .btn-back {
     background: #d32f2f; /* Màu đỏ giống layout */
     color: white;
@@ -49,7 +46,6 @@
     color: #333;
     font-size: 16px;
 }
-
 .search-input {
     padding: 8px;
     border: 1px solid #ccc;
@@ -58,13 +54,11 @@
     width: 200px;
     transition: border-color 0.3s;
 }
-
 .search-input:focus {
     outline: none;
     border-color: #1976d2; /* Màu xanh giống header bảng */
     box-shadow: 0 0 5px rgba(25, 118, 210, 0.3);
 }
-
 .btn-search {
     background: #1976d2; /* Màu xanh giống header bảng */
     color: white;
